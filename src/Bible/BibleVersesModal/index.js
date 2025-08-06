@@ -3,7 +3,7 @@ import { Modal, StatusBar, TouchableOpacity } from "react-native";
 
 import api from "../../services/api";
 
-import Icon from "react-native-vector-icons/MaterialIcons";
+import { MaterialIcons as Icon } from "@react-native-vector-icons/material-icons";
 
 import * as Styled from "./styles";
 import useBible from "../hooks/useBible";

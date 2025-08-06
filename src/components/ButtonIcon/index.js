@@ -2,7 +2,7 @@ import React from "react";
 
 import { TouchableOpacity } from "react-native";
 
-import Icon from "react-native-vector-icons/FontAwesome5";
+import { FontAwesome5 as Icon } from "@react-native-vector-icons/fontawesome5";
 
 export default function ButtonIcon({
   onPress,

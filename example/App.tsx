@@ -10,6 +10,7 @@ import { SafeAreaView, View } from 'react-native';
 import {
   BibleContextWrapper,
   CardSelectBible,
+  Hello,
 } from 'react-native-paodiario-bible';
 
 function App() {

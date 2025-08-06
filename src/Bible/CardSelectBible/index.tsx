@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 
-import * as BibleFunctions from "../functions";
-
 import * as Styled from "./styles"; // agora em TS
 import BookPicker from "../BookPicker";
 import VersionPicker from "../VersionPicker";
@@ -49,17 +47,12 @@ export default function CardSelectBible({
       if (typeof boookSelected === "function") {
         boookSelected(book);
       }
-      if (book.chapter && book.slug && config.currentVersion) {
-        console.log("BibleReader", {
-          title: `${currentBook?.title} ${currentBook?.chapter || ""}`,
-          book: currentBook,
-          reference: `${currentBook?.title} ${currentBook?.chapter || ""}`,
-        });
+      if (book.chapter && book.slug && config?.currentVersion) {
         if (typeof openReader === "function") {
           openReader({
-            title: `${currentBook?.title} ${currentBook?.chapter || ""}`,
-            book: currentBook,
-            reference: `${currentBook?.title} ${currentBook?.chapter || ""}`,
+            title: `${book?.title} ${book?.chapter || ""}`,
+            book: book,
+            reference: `${book?.title} ${book?.chapter || ""}`,
           });
         }
         //   navigation.navigate("Bíblia", {
@@ -103,6 +96,7 @@ export default function CardSelectBible({
             }}
             currentBook={currentBook}
             onSelect={(book: any) => {
+              console.log("book CardSelectBible", book);
               updateCurrentBook(book);
             }}
             visible={biblePickerModalVisible}

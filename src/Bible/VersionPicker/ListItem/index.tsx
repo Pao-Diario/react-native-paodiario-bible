@@ -99,6 +99,7 @@ export default function ListItem({
                   <Styled.VersionButtonIcon
                     downloaded={downloaded}
                     name={iconName}
+                    iconStyle="solid"
                   />
                 </Styled.VersionButtonIconContainer>
                 <Styled.VersionButtonText downloaded={downloaded}>

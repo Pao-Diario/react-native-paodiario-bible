@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Modal, StatusBar } from "react-native";
 
-import Icon from "react-native-vector-icons/MaterialIcons";
+import { MaterialIcons } from "@react-native-vector-icons/material-icons";
 
 import * as Styled from "./styles";
 import ListItem from "./ListItem";
 import { replaceSpecialChars } from "../../services/utils";
 import useBible from "../hooks/useBible";
 import Hello from "../Hello";
-import { getBibleBooks } from "../functions";
+import { getBibleBooks } from "../../services/bibleFunctions";
 
 type BookPickerProps = {
   visible: boolean;
@@ -33,7 +33,7 @@ export default function BookPicker({
   const [filterText, setFilterText] = useState("");
   const bibleContext = useBible();
   if (!bibleContext) return null;
-  const isDarkMode = true;
+  const isDarkMode = bibleContext.currentTheme === "dark";
 
   useEffect(() => {
     async function getData() {
@@ -55,7 +55,7 @@ export default function BookPicker({
     >
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
       <Styled.ThemedSafeAreaView>
-        {/* <Styled.Header>
+        <Styled.Header>
           <Styled.VersionButton
             onPress={() => onDismiss({ openVersion: true })}
           >
@@ -68,7 +68,11 @@ export default function BookPicker({
           </Styled.VersionButton>
           <Styled.Title>Selecione o livro</Styled.Title>
           <Styled.CloseButton onPress={() => onDismiss({ openVersion: false })}>
-            <Icon name="close" size={28} color={isDarkMode ? "#fff" : "#000"} />
+            <MaterialIcons
+              name="close"
+              size={28}
+              color={isDarkMode ? "#fff" : "#000"}
+            />
           </Styled.CloseButton>
         </Styled.Header>
         <Styled.ThemedScrollView
@@ -83,7 +87,7 @@ export default function BookPicker({
                   value={filterText}
                   onChangeText={setFilterText}
                 />
-                <Styled.SearchIcon name="search" />
+                <Styled.SearchIcon name="search" iconStyle="solid" />
               </Styled.SearchField>
             </Styled.SearchRow>
             {books
@@ -95,7 +99,7 @@ export default function BookPicker({
                 if (strTitle.search(searchRegex) > -1) return true;
                 return false;
               })
-              .map((book, index) => (
+              .map((book) => (
                 <ListItem
                   book={book}
                   onSelect={(book: any) => {
@@ -110,7 +114,7 @@ export default function BookPicker({
                 />
               ))}
           </Styled.ScrollContainer>
-        </Styled.ThemedScrollView> */}
+        </Styled.ThemedScrollView>
       </Styled.ThemedSafeAreaView>
     </Modal>
   );

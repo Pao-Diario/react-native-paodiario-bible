@@ -8,7 +8,7 @@ export interface ActiveProps {
   active: boolean;
 }
 
-import Icon from "react-native-vector-icons/FontAwesome5";
+import { FontAwesome5 as Icon } from "@react-native-vector-icons/fontawesome5";
 import { Dimensions } from "react-native";
 const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 

@@ -1,7 +1,8 @@
-import styled from 'styled-components/native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { Dimensions } from 'react-native';
-const { width: SCREEN_WIDTH } = Dimensions.get('screen');
+import styled from "styled-components/native";
+import { FontAwesome5 as Icon } from "@react-native-vector-icons/fontawesome5";
+
+import { Dimensions } from "react-native";
+const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 
 const btnSize = ((SCREEN_WIDTH - 20) * 13) / 100;
 const btnMargin = ((SCREEN_WIDTH - 20) * 1.2) / 100;
@@ -15,8 +16,8 @@ export const Area = styled.TouchableOpacity.attrs({ activeOpacity: 0.8 })`
   border-bottom-width: 1px;
   border-bottom-color: ${({ theme }) => theme.colors.divider};
 
-  ${props => {
-    let style = '';
+  ${(props) => {
+    let style = "";
     if (props.selected) {
       style += ` background-color:${props.theme.colors.backgroundSelected};`;
     } else {
@@ -63,8 +64,8 @@ export const ChapterButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
 
-  ${props => {
-    let style = '';
+  ${(props) => {
+    let style = "";
     if (props.selected) {
       style += ` background-color:${props.theme.colors.darkText};`;
       style += ` border-color:${props.theme.colors.primary};`;

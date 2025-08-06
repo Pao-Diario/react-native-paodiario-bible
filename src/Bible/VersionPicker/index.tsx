@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, StatusBar } from "react-native";
 
-import Icon from "react-native-vector-icons/MaterialIcons";
+import { MaterialIcons as Icon } from "@react-native-vector-icons/material-icons";
 
 import * as Styled from "./styles";
 

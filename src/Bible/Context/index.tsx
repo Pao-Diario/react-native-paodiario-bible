@@ -22,7 +22,7 @@ export default function BibleContextWrapper({
   const [currentBookSlug, setCurrentBookSlug] = useState("gen");
   const [currentBookChapter, setCurrentBookChapter] = useState(1);
   const [currentVersion, setCurrentVersion] = useState("nvt");
-  const [currentTheme, setCurrentTheme] = useState("default");
+  const [currentTheme, setCurrentTheme] = useState("dark");
   const [currentTrack, setCurrentTrack] = useState("");
   const [versionsOffline, setVersionsOffline] = useState<any[]>([]);
   const [currentVersionTitle, setCurrentVersionTitle] = useState(

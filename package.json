@@ -21,21 +21,22 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-vector-icons/fontawesome5": "^12.2.0",
+    "@react-native-vector-icons/material-icons": "^12.3.0",
     "@react-navigation/native": ">=6.1.1",
     "axios": "^1.7.2",
     "color": ">=4.0.0",
     "date-fns": ">=2.2.1",
-    "react": "~19.1.0",
-    "react-native": "~0.80.2",
     "react-native-fs": ">=2.16.6",
     "react-native-select-dropdown": ">=3.3.3",
     "react-native-share": ">=10.2.1",
-    "react-native-vector-icons": ">=9.0.0",
     "styled-components": ">=5.0.0",
     "typescript": "^5.9.2"
   },
   "peerDependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-vector-icons/fontawesome5": "^12.2.0",
+    "@react-native-vector-icons/material-icons": "^12.3.0",
     "@react-navigation/native": ">=6.1.1",
     "color": ">=4.0.0",
     "date-fns": ">=2.2.1",
@@ -44,12 +45,11 @@
     "react-native-fs": ">=2.16.6",
     "react-native-select-dropdown": ">=3.3.3",
     "react-native-share": ">=10.2.1",
-    "react-native-vector-icons": ">=9.0.0",
     "styled-components": ">=5.0.0"
   },
   "devDependencies": {
     "@react-native/typescript-config": "^0.80.2",
     "@types/jest": "^30.0.0",
-    "@types/react-native-vector-icons": "^6.4.18"
+    "@types/react": "^19.1.9"
   }
 }

@@ -1,5 +1,5 @@
-import styled from 'styled-components/native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import styled from "styled-components/native";
+import { FontAwesome5 as Icon } from "@react-native-vector-icons/fontawesome5";
 
 export const Header = styled.View`
   min-width: 100%;

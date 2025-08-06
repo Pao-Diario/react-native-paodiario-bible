@@ -4,7 +4,7 @@ import ButtonIcon from "../../components/ButtonIcon";
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
 import color from "color";
 
-import Icon from "react-native-vector-icons/FontAwesome5";
+import { FontAwesome5 as Icon } from "@react-native-vector-icons/fontawesome5";
 
 interface FontSizeOffsetProps {
   fontSizeOffset: number;
