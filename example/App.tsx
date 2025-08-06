@@ -28,9 +28,6 @@ function App() {
           }}
         >
           <CardSelectBible
-            style={{
-              maxHeight: 110,
-            }}
             title="Ler a Bíblia Título"
             bordered
             showReadButton

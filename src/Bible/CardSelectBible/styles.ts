@@ -25,16 +25,14 @@ interface CardProps extends ViewProps {
 }
 
 export const Card = styled.View<CardProps & { theme: DefaultTheme }>`
-  border-radius: 8px;
+  border-radius: 16px;
 
   border-color: ${({ theme }) => theme.colors.primary};
-  border-width: ${({ bordered }) => (bordered ? "1px" : "0px")};
-  padding: ${({ bordered }) => (bordered ? "10px" : "0px")};
-  margin-bottom: ${({ bordered }) => (bordered ? "10px" : "0px")};
-
+  border-width: ${({ bordered }) => (bordered ? "2px" : "0px")};
+  padding: ${({ bordered }) => (bordered ? "16px" : "0px")};
+  margin-bottom: ${({ bordered }) => (bordered ? "16px" : "0px")};
+  background-color: ${({ theme }) => theme.colors.background};
   overflow: hidden;
-
-  flex: 1;
 `;
 
 export const Title = styled.Text`
@@ -50,14 +48,14 @@ export const Text = styled.Text`
 `;
 export const ButtonSelect = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.colors.background};
-  border-radius: 8px;
-  padding: 10px;
+  border-radius: 32px;
+  padding: 10px 12px;
   flex: 1;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  border-color: ${({ theme }) => theme.colors.text};
-  border-width: 1px;
+  border-color: ${({ theme }) => theme.colors.chip.background.secondary};
+  border-width: 2px;
 `;
 export const ButtonSelectText = styled.Text`
   color: ${({ theme }) => theme.colors.text};
@@ -67,7 +65,7 @@ export const ButtonSelectText = styled.Text`
 `;
 export const ButtonRead = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.colors.primary};
-  border-radius: 8px;
+  border-radius: 32px;
   padding: 10px 20px;
   margin-left: 10px;
   align-items: center;
@@ -80,18 +78,18 @@ export const ButtonReadText = styled.Text`
   text-transform: uppercase;
 `;
 export const ButtonVersionContainer = styled.TouchableOpacity`
-  background-color: ${({ theme }) => theme.colors.contentArea.background};
-  border-radius: 8px;
-  padding: 5px 5px;
+  background-color: ${({ theme }) => theme.colors.chip.background.secondary};
+  border-radius: 16px;
+  padding: 5px 10px;
   margin-left: 10px;
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  border-color: ${({ theme }) => theme.colors.text};
-  border-width: 1px;
+  /* border-color: ${({ theme }) => theme.colors.text}; */
+  /* border-width: 1px; */
 `;
 export const ButtonVersionText = styled.Text`
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme.colors.chip.text.secondary};
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
