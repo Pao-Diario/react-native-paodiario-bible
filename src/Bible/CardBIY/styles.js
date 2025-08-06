@@ -1,7 +1,7 @@
-import styled from 'styled-components/native';
-import { Dimensions } from 'react-native';
+import styled from "styled-components/native";
+import { Dimensions } from "react-native";
 
-const { width: SCREEN_WIDTH } = Dimensions.get('screen');
+const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 
 const SCREEN_PADDED = SCREEN_WIDTH - 40;
 const CATEGORY_ITEM_SPACE = 10;
@@ -14,13 +14,15 @@ export const Row = styled.View`
 export const RowButtons = styled.View`
   flex-direction: row;
   justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
 `;
 export const Card = styled.View`
-  border-radius: 8px;
+  border-radius: 16px;
   background-color: ${({ theme }) => theme.colors.background};
   border-color: ${({ theme }) => theme.colors.primary};
-  border-width: 1px;
-  padding: 10px;
+  border-width: 2px;
+  padding: 16px;
   overflow: hidden;
   margin-bottom: 10px;
 `;
@@ -44,9 +46,8 @@ export const Text = styled.Text`
 `;
 export const ButtonRead = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.colors.primary};
-  border-radius: 8px;
-  padding: 10px;
-  margin-right: 10px;
+  border-radius: 32px;
+  padding: 10px 14px;
 `;
 export const ButtonReadText = styled.Text`
   color: #fff;
