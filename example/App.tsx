@@ -12,6 +12,7 @@ import {
   CardBIY,
   CardSelectBible,
   Hello,
+  VerseOfTheDay,
 } from 'react-native-paodiario-bible';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             }}
           />
           <CardBIY />
+          <VerseOfTheDay />
         </View>
       </SafeAreaView>
     </BibleContextWrapper>

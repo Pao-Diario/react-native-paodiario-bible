@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 import Share from "react-native-share";
 
@@ -8,27 +8,48 @@ import * as Styled from "./styles";
 
 import BibleVersesModal from "../BibleVersesModal";
 import { trim } from "../../services/utils";
-import RNFS, { DocumentDirectoryPath } from "react-native-fs";
+import RNFS, { DocumentDirectoryPath, downloadFile } from "react-native-fs";
+import useBible from "../hooks/useBible";
 
 type VerseOfTheDayProps = {
-  verse: string;
   [key: string]: any;
 };
 
-export default function VerseOfTheDay({ verse, ...props }: VerseOfTheDayProps) {
-  const today = new Date();
-
+export default function VerseOfTheDay({ ...props }: VerseOfTheDayProps) {
+  const bibleContext = useBible();
   const [bibleVersesModalVisible, setBibleVersesVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentVerses, setCurrentVerses] = useState("");
+  const [verseOfTheDay, setVerseOfTheDay] = useState("");
 
   const date = new Date();
   const year = date.getFullYear();
   const month = format(date, "MM");
   const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-  const [imageUrl] = useState(
-    `https://d19heljkw0ui8c.cloudfront.net/files/${year}/${month}/verse_paodiario${year}${month}${day}.png`
-  );
+  const imageUrl = `https://d19heljkw0ui8c.cloudfront.net/files/${year}/${month}/verse_paodiario${year}${month}${day}.png`;
+
+  useEffect(() => {
+    async function getDataOfTheDay() {
+      const today = new Date();
+      const urlDevo = `${
+        bibleContext?.devotionalApiBaseUrl
+      }/devotionals/v2?site_id=4&status=publish&country=BR&on=${format(
+        today,
+        "MM-dd-yyyy"
+      )}`;
+
+      fetch(urlDevo)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data[0]) {
+            const arrTodayReference = data[0].passage_reference;
+            setVerseOfTheDay(arrTodayReference);
+          }
+          setLoading(false);
+        });
+    }
+    getDataOfTheDay();
+  }, []);
 
   async function handleShare() {
     if (!loading) {
@@ -43,22 +64,20 @@ export default function VerseOfTheDay({ verse, ...props }: VerseOfTheDayProps) {
         background: true,
         progressDivider: 1,
       };
-      await RNFS.downloadFile(options).promise;
-      const base64Data = await RNFS.readFile(path, "base64");
-      var imageUrlBase64 = "data:image/png;base64," + base64Data;
-      let shareImage = {
-        title: "Pão Diário - Versículo do dia",
-        url: imageUrlBase64,
-      };
-      setLoading(false);
-      Share.open(shareImage)
-        .then((res: any) => {
-          RNFS.unlink(path);
-          setLoading(false);
-        })
-        .catch((err: any) => {
-          err && console.log(err);
-        });
+      try {
+        await downloadFile(options).promise;
+        let shareImage = {
+          title: "Pão Diário - Versículo do dia",
+          url: `file://${path}`,
+          type: "image/png",
+        };
+        await Share.open(shareImage);
+        await RNFS.unlink(path);
+      } catch (err) {
+        if (err) console.log(err);
+      } finally {
+        setLoading(false);
+      }
     }
   }
 
@@ -67,14 +86,18 @@ export default function VerseOfTheDay({ verse, ...props }: VerseOfTheDayProps) {
       <Styled.Row>
         <Styled.Title>Versículo do dia</Styled.Title>
       </Styled.Row>
-      <Styled.Verse>{verse}</Styled.Verse>
+      <Styled.Verse>{verseOfTheDay}</Styled.Verse>
       <Styled.TextContainer>
-        <Styled.VerseImage source={{ uri: imageUrl }} />
+        <Styled.VerseImage
+          source={{
+            uri: imageUrl,
+          }}
+        />
       </Styled.TextContainer>
       <Styled.RowButtons>
         <Styled.ButtonRead
           onPress={() => {
-            setCurrentVerses(trim(verse));
+            setCurrentVerses(trim(verseOfTheDay));
             setBibleVersesVisible(!bibleVersesModalVisible);
           }}
         >
