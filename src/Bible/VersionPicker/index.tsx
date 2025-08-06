@@ -8,7 +8,8 @@ import * as Styled from "./styles";
 import ListItem from "./ListItem";
 import useBible from "../hooks/useBible";
 
-import { getBibleVersions } from "../functions";
+import Hello from "../Hello";
+import { getBibleVersions } from "../../services/bibleFunctions";
 type VersionPickerProps = {
   visible: boolean;
   onDismiss: () => void;
@@ -28,16 +29,14 @@ export default function VersionPicker({
   const [filterText, setFilterText] = useState("");
 
   const bibleContext = useBible();
-
   if (!bibleContext) {
     return null;
   }
   const isDarkMode = true;
 
   useEffect(() => {
-    async function getData() {
-      const versions = await getBibleVersions();
-
+    function getData() {
+      const versions = getBibleVersions();
       setVersions(versions);
     }
     getData();
@@ -53,9 +52,6 @@ export default function VersionPicker({
       });
     }
   }
-  useEffect(() => {
-    console.log("versionsOffline", bibleContext?.versionsOffline);
-  }, [bibleContext]);
 
   return (
     <Modal

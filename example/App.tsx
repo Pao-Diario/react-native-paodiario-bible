@@ -26,14 +26,12 @@ function App() {
           }}
         >
           <CardSelectBible
-            style={{
-              borderWidth: 1,
-              maxHeight: 100,
-              paddingHorizontal: 20,
-            }}
             title="Ler a Bíblia Título"
             bordered
             showReadButton
+            openReader={(params: any) => {
+              console.log(params);
+            }}
           />
         </View>
       </SafeAreaView>

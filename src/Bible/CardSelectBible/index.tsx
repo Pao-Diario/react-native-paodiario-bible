@@ -13,6 +13,11 @@ type CardSelectBibleProps = {
   bordered?: boolean;
   showReadButton?: boolean;
   boookSelected?: (book: any) => void;
+  openReader?: (params: {
+    title: string;
+    book: any;
+    reference: string;
+  }) => void;
   [key: string]: any;
 };
 
@@ -21,6 +26,7 @@ export default function CardSelectBible({
   bordered,
   showReadButton,
   boookSelected,
+  openReader,
   ...props
 }: CardSelectBibleProps) {
   // const navigation = useNavigation();
@@ -49,6 +55,13 @@ export default function CardSelectBible({
           book: currentBook,
           reference: `${currentBook?.title} ${currentBook?.chapter || ""}`,
         });
+        if (typeof openReader === "function") {
+          openReader({
+            title: `${currentBook?.title} ${currentBook?.chapter || ""}`,
+            book: currentBook,
+            reference: `${currentBook?.title} ${currentBook?.chapter || ""}`,
+          });
+        }
         //   navigation.navigate("Bíblia", {
         //     screen: "BibleReader",
         //     params: {
@@ -108,12 +121,33 @@ export default function CardSelectBible({
             setBiblePickerVisible(!biblePickerModalVisible);
           }}
         >
-          <Styled.ButtonSelectText>Selecionar livro</Styled.ButtonSelectText>
+          <Styled.ButtonSelectText>{`${
+            currentBook?.title || "Selecionar livro"
+          } ${currentBook?.chapter || ""}`}</Styled.ButtonSelectText>
+          <Styled.ButtonVersionContainer
+            onPress={() => {
+              setVersionPickerVisible(!versionPickerModalVisible);
+            }}
+          >
+            <Styled.ButtonVersionText>
+              {currentVersion}
+            </Styled.ButtonVersionText>
+
+            {/* <Icon name="chevron-down" size={12} color={theme.colors.text} /> */}
+          </Styled.ButtonVersionContainer>
         </Styled.ButtonSelect>
         {showReadButton && (
           <Styled.ButtonRead
             onPress={() => {
-              setBiblePickerVisible(true);
+              if (typeof openReader === "function") {
+                openReader({
+                  title: `${currentBook?.title} ${currentBook?.chapter || ""}`,
+                  book: currentBook,
+                  reference: `${currentBook?.title} ${
+                    currentBook?.chapter || ""
+                  }`,
+                });
+              }
             }}
           >
             <Styled.ButtonReadText>Ler</Styled.ButtonReadText>
