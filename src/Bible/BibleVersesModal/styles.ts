@@ -1,11 +1,13 @@
-import styled from 'styled-components/native';
-import { Dimensions } from 'react-native';
+import styled from "styled-components/native";
+import { Dimensions } from "react-native";
 
-const { width: SCREEN_WIDTH } = Dimensions.get('screen');
+const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 export const Container = styled.View`
   min-width: 100%;
-  padding: 10px 20px;
-  justify-content: flex-start;
+  padding: 0px 20px;
+  justify-content: flex-end;
+  align-items: flex-end;
+
   background-color: ${({ theme }) => theme.colors.background};
 `;
 export const ScrollContainer = styled.View`
@@ -26,16 +28,27 @@ export const Title = styled.Text`
   font-weight: bold;
   font-size: 22px;
   color: ${({ theme }) => theme.colors.text};
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 `;
-export const SubTitle = styled.Text`
-  margin-top: 0px;
+export const SubTitle = styled.Text<VerseProps>`
+  margin-top: 20px;
   font-weight: bold;
-  font-size: ${props => (props.fontSizeOffset || 0) + 16}px;
+  font-size: ${(props) => (props.fontSizeOffset || 0) + 16}px;
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 20px;
 `;
 
+export const CloseButton = styled.TouchableOpacity`
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+
+  width: 44px;
+  height: 44px;
+  border-radius: 80px;
+  z-index: 1;
+  background-color: ${({ theme }) => theme.colors.chip.background.primary};
+`;
 export const FormRowContainer = styled.View`
   padding: 0px 0px;
   text-align: center;
@@ -64,8 +77,13 @@ export const Line = styled.View`
   border-bottom-color: #ccc;
 `;
 
-export const Verse = styled.Text`
-  font-size: ${props => (props.fontSizeOffset || 0) + 14}px;
+interface VerseProps {
+  fontSizeOffset?: number;
+}
+
+export const Verse = styled.Text<VerseProps>`
+  font-size: ${(props) => (props.fontSizeOffset || 0) + 16}px;
+  line-height: ${(props) => (props.fontSizeOffset || 0) + 24}px;
   color: ${({ theme }) => theme.colors.text};
   max-width: ${SCREEN_WIDTH - 40}px;
   text-align: justify;

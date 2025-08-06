@@ -7,3 +7,4 @@
 export { default as Hello } from "./Bible/Hello";
 export { default as BibleContextWrapper } from "./Bible/Context";
 export { default as CardSelectBible } from "./Bible/CardSelectBible";
+export { default as CardBIY } from "./Bible/CardBIY";

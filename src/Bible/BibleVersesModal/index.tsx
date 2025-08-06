@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StatusBar, TouchableOpacity } from "react-native";
+import {
+  ActivityIndicator,
+  Modal,
+  StatusBar,
+  TouchableOpacity,
+} from "react-native";
 
 import api from "../../services/api";
 
@@ -22,10 +27,12 @@ export default function BibleVersesModal({
   const bibleContext = useBible();
 
   if (!bibleContext) return null;
-  const { fontSizeOffset } = bibleContext;
+  const { fontSizeOffset, currentTheme } = bibleContext;
+
+  const [loading, setLoading] = useState(false);
   const [listVerses, setListVerses] = useState<any[]>([]);
   const [listVersesContent, setListVersesContent] = useState<any[]>([]);
-  const isDarkMode = true;
+  const isDarkMode = currentTheme === "dark";
   // const theme = useSelector(store => store.config.theme);
   async function handleDone() {
     // console.log('handleDone');
@@ -33,8 +40,9 @@ export default function BibleVersesModal({
     onDismiss();
   }
   async function getBibleText(title: string) {
+    if (!title || title.trim() === "") return [];
     const response = await api.get(`bible/search/ref/${title}`);
-    // console.log(response.data);
+
     if (response.data) {
       return response.data.content;
     }
@@ -59,6 +67,7 @@ export default function BibleVersesModal({
     }
   }
   useEffect(() => {
+    setLoading(true);
     async function getAllListVersesContent() {
       const contents = await Promise.all(
         listVerses.map(async (item) => {
@@ -85,6 +94,7 @@ export default function BibleVersesModal({
       });
 
       setListVersesContent(arrContents);
+      setLoading(false);
     }
     getAllListVersesContent();
   }, [listVerses]);
@@ -104,15 +114,53 @@ export default function BibleVersesModal({
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
       <Styled.ThemedSafeAreaView>
         <Styled.Container>
-          <TouchableOpacity onPress={() => onDismiss()}>
+          <Styled.CloseButton onPress={() => onDismiss()}>
             <Icon name="close" size={28} color={isDarkMode ? "#fff" : "#000"} />
-          </TouchableOpacity>
+          </Styled.CloseButton>
         </Styled.Container>
         <Styled.ThemedScrollView
           decelerationRate="fast"
           showsHorizontalScrollIndicator={false}
         >
-          {/* ...restante do componente... */}
+          <Styled.ScrollContainer>
+            <Styled.Title>Leitura</Styled.Title>
+            {loading && (
+              <ActivityIndicator color={isDarkMode ? "#fff" : "#000"} />
+            )}
+            {!loading &&
+              listVersesContent.length === 0 &&
+              listVerses.map((item, index) => {
+                return (
+                  <Styled.Row key={item?.title}>
+                    <Styled.SubTitle>{item?.title}</Styled.SubTitle>
+                    <Styled.Verse>{item?.content}</Styled.Verse>
+                  </Styled.Row>
+                );
+              })}
+            {!loading &&
+              listVersesContent.length > 0 &&
+              listVersesContent.map((item, index) => {
+                if (index % 2) {
+                  return (
+                    <Styled.Verse
+                      key={`verse_${item}`}
+                      fontSizeOffset={fontSizeOffset}
+                    >
+                      {item}
+                      <Styled.Line />
+                    </Styled.Verse>
+                  );
+                }
+                return (
+                  <Styled.SubTitle
+                    key={`subtitle_${item}`}
+                    fontSizeOffset={fontSizeOffset}
+                  >
+                    {item}
+                  </Styled.SubTitle>
+                );
+              })}
+          </Styled.ScrollContainer>
         </Styled.ThemedScrollView>
       </Styled.ThemedSafeAreaView>
     </Modal>
