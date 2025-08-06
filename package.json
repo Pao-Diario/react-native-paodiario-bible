@@ -1,0 +1,55 @@
+{
+  "name": "react-native-paodiario-bible",
+  "version": "1.0.0",
+  "description": "Componente bíblia reutilizável para React Native.",
+  "main": "lib/src/index.js",
+  "types": "lib/src/index.d.ts",
+  "react-native": "lib/src/index.js",
+  "files": [
+    "lib",
+    "README.md"
+  ],
+  "keywords": [
+    "react-native",
+    "bible",
+    "component"
+  ],
+  "author": "Lon Chao",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-navigation/native": ">=6.1.1",
+    "axios": "^1.7.2",
+    "color": ">=4.0.0",
+    "date-fns": ">=2.2.1",
+    "react": "~19.1.0",
+    "react-native": "~0.80.2",
+    "react-native-fs": ">=2.16.6",
+    "react-native-select-dropdown": ">=3.3.3",
+    "react-native-share": ">=10.2.1",
+    "react-native-vector-icons": ">=9.0.0",
+    "styled-components": ">=5.0.0",
+    "typescript": "^5.9.2"
+  },
+  "peerDependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-navigation/native": ">=6.1.1",
+    "color": ">=4.0.0",
+    "date-fns": ">=2.2.1",
+    "react": "~19.1.0",
+    "react-native": "~0.80.2",
+    "react-native-fs": ">=2.16.6",
+    "react-native-select-dropdown": ">=3.3.3",
+    "react-native-share": ">=10.2.1",
+    "react-native-vector-icons": ">=9.0.0",
+    "styled-components": ">=5.0.0"
+  },
+  "devDependencies": {
+    "@react-native/typescript-config": "^0.80.2",
+    "@types/jest": "^30.0.0",
+    "@types/react-native-vector-icons": "^6.4.18"
+  }
+}
