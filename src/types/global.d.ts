@@ -4,3 +4,8 @@ interface IBibleVersion {
   fullName: string;
   language: string;
 }
+interface IBibleVerse {
+  verseNumber: number;
+  chapterNumber: number;
+  verseText: string;
+}

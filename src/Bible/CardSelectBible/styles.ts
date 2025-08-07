@@ -30,7 +30,7 @@ export const Card = styled.View<CardProps & { theme: DefaultTheme }>`
   border-color: ${({ theme }) => theme.colors.primary};
   border-width: ${({ bordered }) => (bordered ? "2px" : "0px")};
   padding: ${({ bordered }) => (bordered ? "16px" : "0px")};
-  margin-bottom: ${({ bordered }) => (bordered ? "16px" : "0px")};
+  margin-bottom: ${({ bordered }) => (bordered ? "10px" : "0px")};
   background-color: ${({ theme }) => theme.colors.background};
   overflow: hidden;
 `;

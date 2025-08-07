@@ -1,4 +1,4 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 export const Container = styled.View`
   margin-top: 15px;
@@ -13,15 +13,16 @@ export const SubTitle = styled.Text`
 `;
 export const Paragraph = styled.Text`
   color: ${({ theme }) => theme.colors.text};
-  font-size: 14px;
-  text-align: justify;
+  font-size: 16px;
+  line-height: 20px;
+  /* text-align: justify; */
 
   margin-bottom: 10px;
 `;
 export const ButtonLink = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.colors.primary};
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 32px;
   justify-content: center;
   align-items: center;
 `;

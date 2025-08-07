@@ -4,6 +4,7 @@ import * as Styled from "./styles"; // agora em TS
 import BookPicker from "../BookPicker";
 import VersionPicker from "../VersionPicker";
 import useBible from "../hooks/useBible";
+import ReaderModal from "../ReaderModal";
 // import { useNavigation } from "@react-navigation/native";
 
 type CardSelectBibleProps = {
@@ -33,6 +34,7 @@ export default function CardSelectBible({
   const [versionPickerModalVisible, setVersionPickerVisible] = useState(false);
   const [currentBook, setCurrentBook] = useState<any>();
   const [currentVersion, setCurrentVersion] = useState("nvt");
+  const [readerModalVisible, setReaderModalVisible] = useState(false);
 
   async function updateCurrentBook(book: any) {
     const config = bibleContext;
@@ -48,13 +50,7 @@ export default function CardSelectBible({
         boookSelected(book);
       }
       if (book.chapter && book.slug && config?.currentVersion) {
-        if (typeof openReader === "function") {
-          openReader({
-            title: `${book?.title} ${book?.chapter || ""}`,
-            book: book,
-            reference: `${book?.title} ${book?.chapter || ""}`,
-          });
-        }
+        handleRead(book);
         //   navigation.navigate("Bíblia", {
         //     screen: "BibleReader",
         //     params: {
@@ -64,6 +60,17 @@ export default function CardSelectBible({
         //     },
         //   });
       }
+    }
+  }
+  function handleRead(book: any) {
+    if (typeof openReader === "function") {
+      openReader({
+        title: `${book?.title} ${book?.chapter || ""}`,
+        book: book,
+        reference: `${book?.title} ${book?.chapter || ""}`,
+      });
+    } else {
+      setReaderModalVisible(true);
     }
   }
 
@@ -133,21 +140,21 @@ export default function CardSelectBible({
         {showReadButton && (
           <Styled.ButtonRead
             onPress={() => {
-              if (typeof openReader === "function") {
-                openReader({
-                  title: `${currentBook?.title} ${currentBook?.chapter || ""}`,
-                  book: currentBook,
-                  reference: `${currentBook?.title} ${
-                    currentBook?.chapter || ""
-                  }`,
-                });
-              }
+              handleRead(currentBook);
             }}
           >
             <Styled.ButtonReadText>Ler</Styled.ButtonReadText>
           </Styled.ButtonRead>
         )}
       </Styled.RowButtons>
+      {readerModalVisible && (
+        <ReaderModal
+          visible={readerModalVisible}
+          onDismiss={() => {
+            setReaderModalVisible(false);
+          }}
+        />
+      )}
     </Styled.Card>
   );
 }

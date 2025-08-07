@@ -12,7 +12,7 @@ export const Outside = styled.TouchableOpacity`
 export const Container = styled.View`
   position: absolute;
 
-  background-color: rgba(64, 64, 64, 0.5);
+  background-color: rgba(64, 64, 64, 0.8);
   border-radius: 5px;
 
   padding: 10px 15px;

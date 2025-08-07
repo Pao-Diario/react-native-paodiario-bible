@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Modal, StatusBar } from "react-native";
+import * as Styled from "./styles";
 
 import { MaterialIcons } from "@react-native-vector-icons/material-icons";
 
-import * as Styled from "./styles";
 import ListItem from "./ListItem";
 import { replaceSpecialChars } from "../../services/utils";
 import useBible from "../hooks/useBible";
