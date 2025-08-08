@@ -1,15 +1,25 @@
-import { Modal, StatusBar, TouchableOpacity } from "react-native";
+import { Modal, StatusBar, TouchableOpacity, Text, View } from "react-native";
 import * as Styled from "./styles";
 import { MaterialIcons } from "@react-native-vector-icons/material-icons";
 import { FontAwesome5 } from "@react-native-vector-icons/fontawesome5";
 import useBible from "../hooks/useBible";
-import { useRef, useState, useEffect, useContext } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import { ThemeContext } from "styled-components/native";
 import { FlatList } from "react-native";
 
 import { getLinkBook, loadBibleContent } from "../functions";
 import CardSelectBible from "../CardSelectBible";
 import Tooltip from "../../components/Tooltip";
+
+export const colors = [
+  { name: "yellow", color: "#fcfd0a", highlightColor: "#ffffff" },
+  { name: "gray", color: "#e9e9e9", highlightColor: "#ffff99" },
+  { name: "green", color: "#99ff99", highlightColor: "#ffff99" },
+  { name: "orange", color: "#ff9900", highlightColor: "#ffff99" },
+  { name: "purple", color: "#cc99ff", highlightColor: "#ffff99" },
+  { name: "bege", color: "#cc9966", highlightColor: "#ffff99" },
+  { name: "chumbo", color: "#afceeb", highlightColor: "#ffff99" },
+];
 
 export default function ReaderModal({
   visible,
@@ -31,6 +41,7 @@ export default function ReaderModal({
   const [loading, setLoading] = useState(true);
   const [fontChangeVisible, setFontChangeVisible] = useState(false);
   const [contentList, setContentList] = useState<IBibleVerse[]>([]);
+  const [selectedVerse, setSelectedVerse] = useState<IBibleVerse | null>(null);
   // Estados do player vindos do contexto
   const isPlaying = bibleContext.audioPlayer.isPlaying;
   const currentVerse = bibleContext.audioPlayer.currentVerse;
@@ -75,28 +86,71 @@ export default function ReaderModal({
   function renderItem({ item }: { item: IBibleVerse }) {
     const { verseNumber, verseText } = item;
     const verseId = `${bibleContext?.currentBookChapter}_${item.verseNumber}`;
-    const isCurrent =
+    const isAudioPlaying =
       bibleContext?.audioPlayer?.currentVerse &&
       bibleContext?.audioPlayer?.currentVerse === verseId;
+    const isSelected = selectedVerse?.verseNumber === verseNumber;
     return (
-      <Styled.VerseArea onPress={() => {}}>
+      <Styled.VerseArea
+        onPress={() => {
+          if (isSelected) {
+            setSelectedVerse(null);
+          } else {
+            setSelectedVerse(item);
+          }
+        }}
+      >
         <Styled.VerseText
           fontSizeOffset={fontSizeOffset}
-          style={
-            isCurrent && bibleContext?.audioPlayer?.isPlaying
+          style={[
+            isAudioPlaying && bibleContext?.audioPlayer?.isPlaying
               ? {
                   backgroundColor:
                     theme?.colors?.contentArea?.background || "#e0f7fa",
                   marginHorizontal: -16,
                   paddingHorizontal: 16,
                 }
-              : {}
-          }
+              : {},
+          ]}
         >
-          <Styled.VerseNumber fontSizeOffset={fontSizeOffset}>
-            {`${verseNumber} `}
-          </Styled.VerseNumber>
-          {verseText}
+          <View
+            key={`verse-${verseNumber}`}
+            style={[
+              isSelected
+                ? {
+                    borderBottomWidth: 2,
+                    borderBottomColor: theme?.colors?.text || "#2196f3",
+                  }
+                : {},
+            ]}
+          >
+            <Styled.VerseNumber fontSizeOffset={fontSizeOffset}>
+              {`${verseNumber} `}
+            </Styled.VerseNumber>
+          </View>
+          {verseText.split(/(\s+)/).map((word, idx) => {
+            // Se for espaço, renderiza diretamente
+            if (/^\s+$/.test(word)) {
+              return word;
+            }
+            return (
+              <View
+                key={idx}
+                style={[
+                  isSelected
+                    ? {
+                        borderBottomWidth: 2,
+                        borderBottomColor: theme?.colors?.text || "#2196f3",
+                      }
+                    : {},
+                ]}
+              >
+                <Styled.VerseText fontSizeOffset={fontSizeOffset}>
+                  {word}
+                </Styled.VerseText>
+              </View>
+            );
+          })}
         </Styled.VerseText>
       </Styled.VerseArea>
     );
@@ -232,6 +286,33 @@ export default function ReaderModal({
           }
           renderItem={renderItem}
         />
+        {selectedVerse && (
+          <Styled.VerseOptionsContainer>
+            <Styled.VerseOptionsHeader>
+              <View style={{ flex: 1 }}>
+                {/* <Text>Adicionar nota</Text> TO-DO */}
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  setSelectedVerse(null);
+                }}
+              >
+                <MaterialIcons name="close" size={28} color={"#fff"} />
+              </TouchableOpacity>
+            </Styled.VerseOptionsHeader>
+            <Styled.VerseOptionsRow>
+              {colors.map((color) => (
+                <Styled.VerseColorButton
+                  key={color.name}
+                  onPress={() => {
+                    console.log("change color", color.color);
+                  }}
+                  color={color.color}
+                />
+              ))}
+            </Styled.VerseOptionsRow>
+          </Styled.VerseOptionsContainer>
+        )}
         <Styled.NavigationButton
           isPlayerOpened={isPlayerOpened}
           side="left"

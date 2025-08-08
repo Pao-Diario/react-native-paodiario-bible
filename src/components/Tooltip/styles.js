@@ -5,7 +5,7 @@ export const Modal = styled.Modal.attrs(() => ({
   transparent: true,
 }))``;
 
-export const Outside = styled.TouchableOpacity`
+export const Outside = styled.Pressable`
   flex: 1;
 `;
 

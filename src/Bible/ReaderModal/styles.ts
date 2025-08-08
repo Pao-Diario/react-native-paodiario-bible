@@ -1,5 +1,4 @@
 import styled from "styled-components/native";
-import { FlatList } from "react-native";
 
 import { Dimensions } from "react-native";
 import ButtonIcon from "../../components/ButtonIcon";
@@ -78,10 +77,13 @@ export const HeaderIcon = styled(Icon)`
 
 export const VerseArea = styled.TouchableOpacity.attrs({ activeOpacity: 0.8 })`
   padding-bottom: 16px;
+  position: relative;
 `;
 export const VerseNumber = styled.Text<FontSizeOffsetProps>`
   font-weight: bold;
-  color: ${({ theme }: { theme: any }) => theme.colors.text};
+  line-height: ${(props) => (props.fontSizeOffset || 0) + 22}px;
+  font-family: ${(props) => props.theme.fonts.body};
+  font-size: ${(props) => (props.fontSizeOffset || 0) + 16}px;
 `;
 export const VerseText = styled.Text<FontSizeOffsetProps>`
   text-align: justify;
@@ -108,6 +110,7 @@ interface NavigationButtonProps {
   isPlayerOpened: boolean;
   side?: string;
 }
+
 export const NavigationButton = styled.TouchableOpacity<NavigationButtonProps>`
   position: absolute;
   background-color: ${({ theme }: { theme: any }) => theme.colors.background};
@@ -128,6 +131,57 @@ export const NavigationButton = styled.TouchableOpacity<NavigationButtonProps>`
 export const NavigationIcon = styled(Icon)`
   font-size: 20px;
   color: ${({ theme }: { theme: any }) => theme.colors.text};
+`;
+
+export const VerseOptionsContainer = styled.View`
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  position: absolute;
+  bottom: 100px;
+  left: 20px;
+  z-index: 1;
+  width: 250px;
+  max-width: ${SCREEN_WIDTH - 40}px;
+`;
+export const VerseOptionsHeader = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 4px;
+  border-bottom-width: 1px;
+  border-color: rgba(255, 255, 255, 0.2);
+  width: 100%;
+  padding: 8px;
+`;
+export const VerseOptionsRow = styled.View`
+  padding: 8px;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 4px;
+`;
+interface VerseColorButtonProps {
+  color: string;
+  active?: boolean;
+}
+export const VerseColorButton = styled.TouchableOpacity<VerseColorButtonProps>`
+  width: 30px;
+  height: 30px;
+  border-radius: 80px;
+
+  background-color: ${({ color }) => color};
+  border-width: 2px;
+  border-color: ${({ theme }) => theme.colors.text};
+  ${({ active, theme }) =>
+    active
+      ? `
+    border-color: ${theme.colors.primary};
+    border-width: 2.5px;
+  `
+      : ""}
 `;
 
 export const FontScaleContainer = styled.View`
