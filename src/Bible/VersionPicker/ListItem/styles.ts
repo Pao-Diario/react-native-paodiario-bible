@@ -38,8 +38,8 @@ export const VersionButtonContainer = styled.View<DownloadedProps>`
     downloaded: boolean;
   }) => (downloaded ? theme.colors.background : theme.colors.primary)};
   border-width: 1px;
-  padding: 4px 8px;
-  border-radius: 5px;
+  padding: 6px 12px;
+  border-radius: 16px;
 `;
 export const VersionButtonIconContainer = styled.View<DownloadedProps>`
   border-color: ${({

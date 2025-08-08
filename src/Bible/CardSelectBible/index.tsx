@@ -48,8 +48,7 @@ export default function CardSelectBible({
       setCurrentBook(book);
       if (typeof boookSelected === "function") {
         boookSelected(book);
-      }
-      if (book.chapter && book.slug && config?.currentVersion) {
+      } else if (book.chapter && book.slug && config?.currentVersion) {
         handleRead(book);
         //   navigation.navigate("Bíblia", {
         //     screen: "BibleReader",
@@ -103,7 +102,6 @@ export default function CardSelectBible({
             }}
             currentBook={currentBook}
             onSelect={(book: any) => {
-              console.log("book CardSelectBible", book);
               updateCurrentBook(book);
             }}
             visible={biblePickerModalVisible}

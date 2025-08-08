@@ -44,7 +44,7 @@ export default function ReaderModal({
         bookChapter: bibleContext?.currentBookChapter,
         bookTitle: bibleContext?.currentBookName,
       });
-      console.log("data", data);
+      // console.log("data", data);
       setContentList(data as IBibleVerse[]);
 
       setLoading(false);
@@ -102,13 +102,11 @@ export default function ReaderModal({
     );
   }
   async function listenChapter() {
-    console.log("listenChapter", isPlaying);
     if (bibleContext?.audioPlayer?.isPlaying) {
-      console.log("listenChapter pause");
       await bibleContext.audioPlayer.pause();
       return;
     }
-    console.log("listenChapter play");
+
     const chapterTracks = contentList.map((contentItem) => ({
       id: `${bibleContext?.currentBookChapter}_${contentItem.verseNumber}`,
       url: `https://general.app.paodiario.org.br/speech/stream/text/${encodeURI(
@@ -120,7 +118,7 @@ export default function ReaderModal({
         "https://paodiario.org/wp-content/themes/paodiario/bible/assets/img/icon_bible_audio.png",
       verseNumber: contentItem.verseNumber,
     }));
-    console.log("listenChapter play chapterTracks", chapterTracks);
+
     bibleContext?.audioPlayer.playChapter(chapterTracks);
     // currentVerse será atualizado pelo contexto
   }
@@ -138,7 +136,6 @@ export default function ReaderModal({
   return (
     <Modal
       visible={visible}
-      onDismiss={onDismiss}
       {...props}
       animationType="slide"
       presentationStyle="fullScreen"
@@ -205,6 +202,7 @@ export default function ReaderModal({
               <Styled.CloseButton
                 onPress={() => {
                   bibleContext?.audioPlayer?.pause();
+
                   onDismiss();
                 }}
               >

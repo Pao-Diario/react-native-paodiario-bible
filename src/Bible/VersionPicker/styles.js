@@ -3,7 +3,7 @@ import { FontAwesome5 as Icon } from "@react-native-vector-icons/fontawesome5";
 
 export const Header = styled.View`
   min-width: 100%;
-  padding: 10px;
+  padding: 12px;
   justify-content: center;
   flex-direction: row;
   background-color: ${({ theme }) => theme.colors.background};
@@ -12,10 +12,13 @@ export const Header = styled.View`
 `;
 export const CloseButton = styled.TouchableOpacity`
   position: absolute;
-  right: 0px;
+  right: 10px;
   top: 3px;
   width: 44px;
   height: 44px;
+  border-radius: 80px;
+  z-index: 1;
+  background-color: ${({ theme }) => theme.colors.chip.background.primary};
 
   justify-content: center;
   align-items: center;

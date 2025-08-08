@@ -57,7 +57,7 @@ export const ChapterButton = styled.TouchableOpacity`
   margin-right: ${btnMargin}px;
   margin-bottom: ${btnMargin}px;
 
-  border-radius: 8px;
+  border-radius: 100px;
 
   width: ${btnSize}px;
   height: ${btnSize}px;
