@@ -23,6 +23,8 @@ export const BibleProvider: React.FC<{ children: React.ReactNode }> = ({
       const bibleConfig = await Storage.get("BibleConfig");
       if (bibleConfig) {
         updateContext(bibleConfig);
+        bibleConfig.bookmarks = bibleConfig.bookmarks || [];
+        setBookmarks(bibleConfig.bookmarks);
       }
     }
     loadStoredConfig();
@@ -90,6 +92,31 @@ export const BibleProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentTrack, setCurrentTrack] = useState("");
   const [versionsOffline, setVersionsOffline] = useState<any[]>([]);
 
+  // Bookmarks
+  const [bookmarks, setBookmarks] = useState<IBibleVerse[]>([]);
+
+  // Carrega bookmarks do storage ao iniciar
+  // useEffect(() => {
+  //   (async () => {
+  //     const saved = await Storage.get("bookmarks");
+  //     if (saved && Array.isArray(saved)) {
+  //       setBookmarks(saved);
+  //     }
+  //   })();
+  // }, []);
+
+  // Salva bookmarks sempre que mudar
+  useEffect(() => {
+    (async () => {
+      const bibleConfig = await Storage.get("BibleConfig");
+      if (bibleConfig) {
+        bibleConfig.bookmarks = bookmarks;
+        Storage.persist("BibleConfig", bibleConfig);
+      }
+      console.log("bookmarks", bookmarks);
+    })();
+  }, [bookmarks]);
+
   function updateContext(config: any) {
     Storage.persist("BibleConfig", config);
     if (config.devotionalApiBaseUrl !== undefined)
@@ -137,6 +164,8 @@ export const BibleProvider: React.FC<{ children: React.ReactNode }> = ({
     versionsOffline,
     setVersionsOffline,
     updateContext,
+    bookmarks,
+    setBookmarks,
     audioPlayer: {
       isPlayerReady,
       isPlaying,

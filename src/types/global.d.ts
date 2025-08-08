@@ -7,5 +7,7 @@ interface IBibleVersion {
 interface IBibleVerse {
   verseNumber: number;
   chapterNumber: number;
-  verseText: string;
+  verseText?: string;
+  language_translation_book?: string;
+  bookSlug?: string;
 }

@@ -1,5 +1,7 @@
 import { createContext, useContext } from "react";
 
+export type IBibleVerse = any; // You may want to define the type IBibleVerse here
+
 export type BibleContextType = {
   devotionalApiBaseUrl: string;
   setDevotionalApiBaseUrl: (url: string) => void;
@@ -24,6 +26,8 @@ export type BibleContextType = {
   versionsOffline: any[];
   setVersionsOffline: (versions: any[]) => void;
   updateContext: (config: any) => void;
+  bookmarks: IBibleVerse[];
+  setBookmarks: React.Dispatch<React.SetStateAction<IBibleVerse[]>>;
   audioPlayer: {
     isPlayerReady: boolean;
     isPlaying: boolean;

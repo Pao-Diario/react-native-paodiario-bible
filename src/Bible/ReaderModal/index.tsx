@@ -128,7 +128,7 @@ export default function ReaderModal({
               {`${verseNumber} `}
             </Styled.VerseNumber>
           </View>
-          {verseText.split(/(\s+)/).map((word, idx) => {
+          {verseText?.split(/(\s+)/).map((word, idx) => {
             // Se for espaço, renderiza diretamente
             if (/^\s+$/.test(word)) {
               return word;
@@ -164,7 +164,7 @@ export default function ReaderModal({
     const chapterTracks = contentList.map((contentItem) => ({
       id: `${bibleContext?.currentBookChapter}_${contentItem.verseNumber}`,
       url: `https://general.app.paodiario.org.br/speech/stream/text/${encodeURI(
-        contentItem.verseText
+        contentItem?.verseText ?? ""
       )}`,
       title: `${bibleContext?.currentBookName}: ${bibleContext?.currentBookChapter}:${contentItem.verseNumber}`,
       artist: "Ministérios Pão diário",
@@ -301,15 +301,70 @@ export default function ReaderModal({
               </TouchableOpacity>
             </Styled.VerseOptionsHeader>
             <Styled.VerseOptionsRow>
-              {colors.map((color) => (
-                <Styled.VerseColorButton
-                  key={color.name}
-                  onPress={() => {
-                    console.log("change color", color.color);
-                  }}
-                  color={color.color}
-                />
-              ))}
+              {colors.map((color) => {
+                const active = bibleContext?.bookmarks.some(
+                  (verse) =>
+                    verse.bookSlug === selectedVerse?.bookSlug &&
+                    verse.chapterNumber === selectedVerse?.chapterNumber &&
+                    verse.verseNumber === selectedVerse?.verseNumber &&
+                    verse.color === color.name
+                );
+                return (
+                  <Styled.VerseColorButton
+                    key={color.name}
+                    onPress={() => {
+                      console.log(
+                        "change color",
+                        color.color,
+                        bibleContext?.currentBookSlug,
+                        selectedVerse
+                      );
+                      const index = bibleContext?.bookmarks.findIndex(
+                        (verse) =>
+                          verse.bookSlug === selectedVerse?.bookSlug &&
+                          verse.chapterNumber ===
+                            selectedVerse?.chapterNumber &&
+                          verse.verseNumber === selectedVerse?.verseNumber
+                      );
+                      if (index > -1) {
+                        if (active) {
+                          //remove color
+                          bibleContext?.setBookmarks((prev: IBibleVerse[]) => {
+                            return prev.filter((_, _index) => _index !== index);
+                          });
+                        } else {
+                          //change color
+                          bibleContext?.setBookmarks((prev: IBibleVerse[]) => {
+                            return prev.map((verse, _index) => {
+                              if (_index === index) {
+                                return {
+                                  ...verse,
+                                  color: color.name,
+                                };
+                              }
+                              return verse;
+                            });
+                          });
+                        }
+                      } else {
+                        bibleContext?.setBookmarks([
+                          ...bibleContext?.bookmarks,
+                          {
+                            bookSlug: selectedVerse?.bookSlug,
+                            chapterNumber: selectedVerse?.chapterNumber,
+                            verseNumber: selectedVerse?.verseNumber,
+                            language_translation_book:
+                              selectedVerse?.language_translation_book,
+                            color: color.name,
+                          },
+                        ]);
+                      }
+                    }}
+                    color={color.color}
+                    active={active}
+                  />
+                );
+              })}
             </Styled.VerseOptionsRow>
           </Styled.VerseOptionsContainer>
         )}

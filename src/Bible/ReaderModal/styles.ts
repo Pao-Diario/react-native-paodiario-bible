@@ -178,7 +178,7 @@ export const VerseColorButton = styled.TouchableOpacity<VerseColorButtonProps>`
   ${({ active, theme }) =>
     active
       ? `
-    border-color: ${theme.colors.primary};
+    border-color: red;
     border-width: 2.5px;
   `
       : ""}
