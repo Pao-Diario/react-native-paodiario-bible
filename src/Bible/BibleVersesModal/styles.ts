@@ -4,11 +4,14 @@ import { Dimensions } from "react-native";
 const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 export const Container = styled.View`
   min-width: 100%;
-  padding: 0px 20px;
-  justify-content: flex-end;
-  align-items: flex-end;
+  padding: 13px 20px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
 
   background-color: ${({ theme }) => theme.colors.background};
+  border-bottom-width: 1px;
+  border-bottom-color: ${({ theme }) => theme.colors.divider};
 `;
 export const ScrollContainer = styled.View`
   min-width: 100%;
@@ -39,6 +42,9 @@ export const SubTitle = styled.Text<VerseProps>`
 `;
 
 export const CloseButton = styled.TouchableOpacity`
+  position: absolute;
+  right: 10px;
+  top: 3px;
   text-align: center;
   justify-content: center;
   align-items: center;

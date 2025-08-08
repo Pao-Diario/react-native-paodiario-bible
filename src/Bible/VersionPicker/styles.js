@@ -9,6 +9,7 @@ export const Header = styled.View`
   background-color: ${({ theme }) => theme.colors.background};
   border-width: 1px;
   border-color: ${({ theme }) => theme.colors.divider};
+  border-radius: 32px 32px 0 0;
 `;
 export const CloseButton = styled.TouchableOpacity`
   position: absolute;
@@ -33,9 +34,20 @@ export const ScrollContainer = styled.View`
 export const ThemedScrollView = styled.ScrollView`
   background-color: ${({ theme }) => theme.colors.background};
 `;
-export const ThemedSafeAreaView = styled.SafeAreaView`
+export const OverlayOutside = styled.View`
   flex: 1;
-  background-color: ${({ theme }) => theme.colors.background};
+  /* background-color: ${({ theme }) => theme.colors.background}; */
+  /* background-color: red; */
+  justify-content: flex-end;
+
+  background-color: rgba(0, 0, 0, 0.8);
+`;
+export const ContainerView = styled.View`
+  height: 50%;
+  width: 100%;
+  border-radius: 32px 32px 0 0;
+  position: relative;
+  z-index: 9;
 `;
 
 export const Title = styled.Text`

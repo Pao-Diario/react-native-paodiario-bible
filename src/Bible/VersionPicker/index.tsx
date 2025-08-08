@@ -60,45 +60,52 @@ export default function VersionPicker({
       onRequestClose={onBackButtonPress}
       {...props}
       animationType="slide"
-      presentationStyle="formSheet"
+      transparent
       key={991}
     >
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
-      <Styled.ThemedSafeAreaView>
-        <Styled.Header>
-          <Styled.Title>Selecione a versão</Styled.Title>
-          <Styled.CloseButton onPress={() => onDismiss()}>
-            <Icon name="close" size={28} color={isDarkMode ? "#fff" : "#000"} />
-          </Styled.CloseButton>
-        </Styled.Header>
-        <Styled.ThemedScrollView
-          decelerationRate="fast"
-          showsHorizontalScrollIndicator={false}
-        >
-          <Styled.ScrollContainer>
-            {versions.map((version, index) => (
-              <ListItem
-                key={`picker_version_${version.slug}`}
-                version={version}
-                onSelect={(version: any) => {
-                  updateCurrentVersion(version);
-                  onDismiss();
-                }}
-                active={version.slug === bibleContext?.currentVersion}
-                offline={
-                  (bibleContext?.versionsOffline ?? []).findIndex(
-                    (versionOffline: { slug: string }) =>
-                      version && version.slug === versionOffline.slug
-                  ) > -1
-                }
-                selectedChapter={
-                  version.slug === bibleContext?.currentBookChapter?.toString()
-                }
-              ></ListItem>
-            ))}
-          </Styled.ScrollContainer>
-        </Styled.ThemedScrollView>
-      </Styled.ThemedSafeAreaView>
+      <Styled.OverlayOutside>
+        <Styled.ContainerView>
+          <Styled.Header>
+            <Styled.Title>Selecione a versão</Styled.Title>
+            <Styled.CloseButton onPress={() => onDismiss()}>
+              <Icon
+                name="close"
+                size={28}
+                color={isDarkMode ? "#fff" : "#000"}
+              />
+            </Styled.CloseButton>
+          </Styled.Header>
+          <Styled.ThemedScrollView
+            decelerationRate="fast"
+            showsHorizontalScrollIndicator={false}
+          >
+            <Styled.ScrollContainer>
+              {versions.map((version, index) => (
+                <ListItem
+                  key={`picker_version_${version.slug}`}
+                  version={version}
+                  onSelect={(version: any) => {
+                    updateCurrentVersion(version);
+                    onDismiss();
+                  }}
+                  active={version.slug === bibleContext?.currentVersion}
+                  offline={
+                    (bibleContext?.versionsOffline ?? []).findIndex(
+                      (versionOffline: { slug: string }) =>
+                        version && version.slug === versionOffline.slug
+                    ) > -1
+                  }
+                  selectedChapter={
+                    version.slug ===
+                    bibleContext?.currentBookChapter?.toString()
+                  }
+                ></ListItem>
+              ))}
+            </Styled.ScrollContainer>
+          </Styled.ThemedScrollView>
+        </Styled.ContainerView>
+      </Styled.OverlayOutside>
     </Modal>
   );
 }

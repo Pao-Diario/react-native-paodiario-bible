@@ -114,6 +114,7 @@ export default function BibleVersesModal({
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
       <Styled.ThemedSafeAreaView>
         <Styled.Container>
+          <Styled.Title>Leitura</Styled.Title>
           <Styled.CloseButton onPress={() => onDismiss()}>
             <Icon name="close" size={28} color={isDarkMode ? "#fff" : "#000"} />
           </Styled.CloseButton>
@@ -123,7 +124,6 @@ export default function BibleVersesModal({
           showsHorizontalScrollIndicator={false}
         >
           <Styled.ScrollContainer>
-            <Styled.Title>Leitura</Styled.Title>
             {loading && (
               <ActivityIndicator color={isDarkMode ? "#fff" : "#000"} />
             )}
