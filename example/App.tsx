@@ -8,8 +8,8 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, View } from 'react-native';
 import {
-  BibleContextWrapper,
   CardBIY,
+  BibleContextWrapper,
   CardSelectBible,
   HomeBible,
   VerseOfTheDay,

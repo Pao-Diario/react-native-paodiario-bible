@@ -3,7 +3,8 @@ import * as Styled from "./styles";
 import { MaterialIcons } from "@react-native-vector-icons/material-icons";
 import { FontAwesome5 } from "@react-native-vector-icons/fontawesome5";
 import useBible from "../hooks/useBible";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
+import { ThemeContext } from "styled-components/native";
 import { FlatList } from "react-native";
 
 import { getLinkBook, loadBibleContent } from "../functions";
@@ -18,6 +19,7 @@ export default function ReaderModal({
   visible: boolean;
   onDismiss: () => void;
 }) {
+  const theme = useContext(ThemeContext);
   const bibleContext = useBible();
   if (!bibleContext) return null;
 
@@ -29,6 +31,9 @@ export default function ReaderModal({
   const [loading, setLoading] = useState(true);
   const [fontChangeVisible, setFontChangeVisible] = useState(false);
   const [contentList, setContentList] = useState<IBibleVerse[]>([]);
+  // Estados do player vindos do contexto
+  const isPlaying = bibleContext.audioPlayer.isPlaying;
+  const currentVerse = bibleContext.audioPlayer.currentVerse;
   const isDarkMode = bibleContext.currentTheme === "dark";
 
   useEffect(() => {
@@ -46,11 +51,12 @@ export default function ReaderModal({
     }
     setLoading(true);
     loadTextContent();
-  }, [bibleContext]);
+  }, [bibleContext?.currentBookChapter]);
 
   async function bibleNavigate(direction: "next" | "prev") {
     if (!bibleContext) return;
     const config = bibleContext;
+    bibleContext.audioPlayer.pause();
     const nextBook = await getLinkBook(config, direction);
 
     bibleContext.updateContext({
@@ -68,12 +74,25 @@ export default function ReaderModal({
   }
   function renderItem({ item }: { item: IBibleVerse }) {
     const { verseNumber, verseText } = item;
-    // console.log('verseNumber', verseNumber);
-    // console.log(verseText);
-
+    const verseId = `${bibleContext?.currentBookChapter}_${item.verseNumber}`;
+    const isCurrent =
+      bibleContext?.audioPlayer?.currentVerse &&
+      bibleContext?.audioPlayer?.currentVerse === verseId;
     return (
       <Styled.VerseArea onPress={() => {}}>
-        <Styled.VerseText fontSizeOffset={fontSizeOffset}>
+        <Styled.VerseText
+          fontSizeOffset={fontSizeOffset}
+          style={
+            isCurrent && bibleContext?.audioPlayer?.isPlaying
+              ? {
+                  backgroundColor:
+                    theme?.colors?.contentArea?.background || "#e0f7fa",
+                  marginHorizontal: -16,
+                  paddingHorizontal: 16,
+                }
+              : {}
+          }
+        >
           <Styled.VerseNumber fontSizeOffset={fontSizeOffset}>
             {`${verseNumber} `}
           </Styled.VerseNumber>
@@ -82,29 +101,28 @@ export default function ReaderModal({
       </Styled.VerseArea>
     );
   }
-  function listenChapter() {
-    // speechContent()
-
-    const chapterTracks = [];
-    for (const contentItem of contentList) {
-      // console.log(contentItem.verseNumber, contentItem.verseText);
-      chapterTracks.push({
-        url: `https://general.app.paodiario.org.br/speech/stream/text/${encodeURI(
-          contentItem.verseText
-        )}`,
-        title: `${bibleContext?.currentBookName}: ${bibleContext?.currentBookChapter}:${contentItem.verseNumber}`,
-        artist: "Ministérios Pão diário",
-        isLiveStream: true,
-        image: "icon_bible_audio.png",
-        artwork:
-          "https://paodiario.org/wp-content/themes/paodiario/bible/assets/img/icon_bible_audio.png",
-        // type: 'smoothstreaming',
-      });
+  async function listenChapter() {
+    console.log("listenChapter", isPlaying);
+    if (bibleContext?.audioPlayer?.isPlaying) {
+      console.log("listenChapter pause");
+      await bibleContext.audioPlayer.pause();
+      return;
     }
-    console.log("chapterTracks", chapterTracks.length);
-    // dispatch(PodcastActions.setCurrentTrack(chapterTracks));
-    // await TrackPlayer.add(STREAMING_TRACK);
-    // await TrackPlayer.play();
+    console.log("listenChapter play");
+    const chapterTracks = contentList.map((contentItem) => ({
+      id: `${bibleContext?.currentBookChapter}_${contentItem.verseNumber}`,
+      url: `https://general.app.paodiario.org.br/speech/stream/text/${encodeURI(
+        contentItem.verseText
+      )}`,
+      title: `${bibleContext?.currentBookName}: ${bibleContext?.currentBookChapter}:${contentItem.verseNumber}`,
+      artist: "Ministérios Pão diário",
+      artwork:
+        "https://paodiario.org/wp-content/themes/paodiario/bible/assets/img/icon_bible_audio.png",
+      verseNumber: contentItem.verseNumber,
+    }));
+    console.log("listenChapter play chapterTracks", chapterTracks);
+    bibleContext?.audioPlayer.playChapter(chapterTracks);
+    // currentVerse será atualizado pelo contexto
   }
   function handleFontSizeOffset(diff = 1) {
     const offset = fontSizeOffset + diff;
@@ -175,12 +193,21 @@ export default function ReaderModal({
                 </Styled.FontScaleContainer>
               </Tooltip>
               <Styled.HeaderButton onPress={() => listenChapter()}>
-                <Styled.HeaderIcon iconStyle="solid" name="volume-up" />
+                {isPlaying ? (
+                  <Styled.HeaderIcon iconStyle="solid" name="pause" />
+                ) : (
+                  <Styled.HeaderIcon iconStyle="solid" name="volume-up" />
+                )}
               </Styled.HeaderButton>
               <Styled.HeaderButton onPress={() => setFontChangeVisible(true)}>
                 <Styled.HeaderIcon iconStyle="solid" name="text-height" />
               </Styled.HeaderButton>
-              <Styled.CloseButton onPress={() => onDismiss()}>
+              <Styled.CloseButton
+                onPress={() => {
+                  bibleContext?.audioPlayer?.pause();
+                  onDismiss();
+                }}
+              >
                 <MaterialIcons
                   name="close"
                   size={28}

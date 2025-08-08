@@ -243,7 +243,6 @@ async function getBibleContentFromWeb({
     }
   }
   try {
-    console.log("asdasd");
     const response = await bibleApi.get(`${language}/${version}/${search}`);
     if (
       response.data &&

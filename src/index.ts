@@ -1,6 +1,7 @@
 // export { default as Reader } from "./Bible/Reader";
 export { default as Hello } from "./Bible/Hello";
 export { default as BibleContextWrapper } from "./Bible/Context";
+// export { BibleProvider as default } from "./Bible/hooks/BibleProvider";
 export { default as CardSelectBible } from "./Bible/CardSelectBible";
 export { default as CardBIY } from "./Bible/CardBIY";
 export { default as VerseOfTheDay } from "./Bible/VerseOfTheDay";
