@@ -41,10 +41,12 @@ export default function ReaderModal({
   const [loading, setLoading] = useState(true);
   const [fontChangeVisible, setFontChangeVisible] = useState(false);
   const [contentList, setContentList] = useState<IBibleVerse[]>([]);
+  // const [bookmarkedVerses, setBookmarkedVerses] = useState<IBibleVerse[]>([]);
   const [selectedVerse, setSelectedVerse] = useState<IBibleVerse | null>(null);
   // Estados do player vindos do contexto
   const isPlaying = bibleContext.audioPlayer.isPlaying;
-  const currentVerse = bibleContext.audioPlayer.currentVerse;
+  const bookmarkedVerses = bibleContext.bookmarks;
+
   const isDarkMode = bibleContext.currentTheme === "dark";
 
   useEffect(() => {
@@ -63,6 +65,11 @@ export default function ReaderModal({
     setLoading(true);
     loadTextContent();
   }, [bibleContext?.currentBookChapter]);
+
+  // useEffect(() => {
+  //   console.log("bookmarks", bibleContext?.bookmarks);
+  //   // setBookmarkedVerses(bibleContext?.bookmarks);
+  // }, [bibleContext?.bookmarks]);
 
   async function bibleNavigate(direction: "next" | "prev") {
     if (!bibleContext) return;
@@ -90,6 +97,13 @@ export default function ReaderModal({
       bibleContext?.audioPlayer?.currentVerse &&
       bibleContext?.audioPlayer?.currentVerse === verseId;
     const isSelected = selectedVerse?.verseNumber === verseNumber;
+    const bookmarkData = bookmarkedVerses.find(
+      (bookmark) =>
+        bookmark.bookSlug === bibleContext?.currentBookSlug &&
+        bookmark.chapterNumber === item?.chapterNumber &&
+        bookmark.verseNumber === item?.verseNumber
+    );
+    // console.log("bookmarkData", bookmarkData);
     return (
       <Styled.VerseArea
         onPress={() => {
@@ -99,20 +113,27 @@ export default function ReaderModal({
             setSelectedVerse(item);
           }
         }}
+        style={[
+          isAudioPlaying && bibleContext?.audioPlayer?.isPlaying
+            ? {
+                backgroundColor:
+                  theme?.colors?.contentArea?.background || "#e0f7fa",
+                marginHorizontal: -16,
+                paddingHorizontal: 16,
+              }
+            : {},
+          bookmarkData
+            ? {
+                backgroundColor:
+                  colors.find((color) => color.name === bookmarkData.color)
+                    ?.color || "#00e1ff",
+                marginHorizontal: -20,
+                paddingHorizontal: 20,
+              }
+            : {},
+        ]}
       >
-        <Styled.VerseText
-          fontSizeOffset={fontSizeOffset}
-          style={[
-            isAudioPlaying && bibleContext?.audioPlayer?.isPlaying
-              ? {
-                  backgroundColor:
-                    theme?.colors?.contentArea?.background || "#e0f7fa",
-                  marginHorizontal: -16,
-                  paddingHorizontal: 16,
-                }
-              : {},
-          ]}
-        >
+        <Styled.VerseText fontSizeOffset={fontSizeOffset}>
           <View
             key={`verse-${verseNumber}`}
             style={[
@@ -302,9 +323,9 @@ export default function ReaderModal({
             </Styled.VerseOptionsHeader>
             <Styled.VerseOptionsRow>
               {colors.map((color) => {
-                const active = bibleContext?.bookmarks.some(
+                const active = bookmarkedVerses.some(
                   (verse) =>
-                    verse.bookSlug === selectedVerse?.bookSlug &&
+                    verse.bookSlug === bibleContext?.currentBookSlug &&
                     verse.chapterNumber === selectedVerse?.chapterNumber &&
                     verse.verseNumber === selectedVerse?.verseNumber &&
                     verse.color === color.name
@@ -313,18 +334,20 @@ export default function ReaderModal({
                   <Styled.VerseColorButton
                     key={color.name}
                     onPress={() => {
+                      const index = bookmarkedVerses.findIndex(
+                        (verse) =>
+                          verse.bookSlug === bibleContext?.currentBookSlug &&
+                          verse.chapterNumber ===
+                            selectedVerse?.chapterNumber &&
+                          verse.verseNumber === selectedVerse?.verseNumber
+                      );
+
                       console.log(
                         "change color",
                         color.color,
                         bibleContext?.currentBookSlug,
-                        selectedVerse
-                      );
-                      const index = bibleContext?.bookmarks.findIndex(
-                        (verse) =>
-                          verse.bookSlug === selectedVerse?.bookSlug &&
-                          verse.chapterNumber ===
-                            selectedVerse?.chapterNumber &&
-                          verse.verseNumber === selectedVerse?.verseNumber
+                        selectedVerse,
+                        index
                       );
                       if (index > -1) {
                         if (active) {
@@ -350,7 +373,7 @@ export default function ReaderModal({
                         bibleContext?.setBookmarks([
                           ...bibleContext?.bookmarks,
                           {
-                            bookSlug: selectedVerse?.bookSlug,
+                            bookSlug: bibleContext?.currentBookSlug,
                             chapterNumber: selectedVerse?.chapterNumber,
                             verseNumber: selectedVerse?.verseNumber,
                             language_translation_book:
@@ -359,6 +382,7 @@ export default function ReaderModal({
                           },
                         ]);
                       }
+                      setSelectedVerse(null);
                     }}
                     color={color.color}
                     active={active}

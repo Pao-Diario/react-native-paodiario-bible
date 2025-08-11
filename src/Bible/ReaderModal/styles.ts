@@ -76,7 +76,8 @@ export const HeaderIcon = styled(Icon)`
 `;
 
 export const VerseArea = styled.TouchableOpacity.attrs({ activeOpacity: 0.8 })`
-  padding-bottom: 16px;
+  padding-bottom: 6px;
+  padding-top: 6px;
   position: relative;
 `;
 export const VerseNumber = styled.Text<FontSizeOffsetProps>`
