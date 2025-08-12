@@ -3,6 +3,8 @@ import { createContext, useContext } from "react";
 export type IBibleVerse = any; // You may want to define the type IBibleVerse here
 
 export type BibleContextType = {
+  customTheme?: any;
+  setCustomTheme?: (theme: any) => void;
   devotionalApiBaseUrl: string;
   setDevotionalApiBaseUrl: (url: string) => void;
   fontSizeOffset: number;

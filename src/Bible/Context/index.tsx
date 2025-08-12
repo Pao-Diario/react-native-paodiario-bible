@@ -5,117 +5,77 @@ import lightTheme from "../../themes";
 import darkTheme from "../../themes/dark";
 import useBible from "../hooks/useBible";
 
-const BibleContextWrapper: React.FC<{ children: React.ReactNode }> = ({
+interface BibleContextWrapperProps {
+  children: React.ReactNode;
+  initialTheme?: "light" | "dark" | "custom";
+  customTheme?: any;
+  // Props controladas para atualização a partir do app
+  currentTheme?: "light" | "dark" | "custom";
+  currentCustomTheme?: any;
+}
+
+// Componente interno para sincronizar as props controladas com o contexto (executa DENTRO do Provider)
+const BibleThemeBridge: React.FC<{
+  children: React.ReactNode;
+  fallbackInitialTheme: "light" | "dark" | "custom";
+  fallbackCustomTheme?: any;
+  controlledTheme?: "light" | "dark" | "custom";
+  controlledCustomTheme?: any;
+}> = ({
   children,
+  fallbackInitialTheme,
+  fallbackCustomTheme,
+  controlledTheme,
+  controlledCustomTheme,
 }) => {
-  // Tenta pegar o tema do contexto BibleProvider
-  let theme = lightTheme;
-  try {
-    const bibleContext = useBible();
-    if (bibleContext && bibleContext.currentTheme === "dark") {
-      theme = darkTheme;
+  const bible = useBible();
+
+  // Sincroniza tema controlado vindo por props com o contexto
+  React.useEffect(() => {
+    if (controlledTheme && bible?.setCurrentTheme) {
+      bible.setCurrentTheme(controlledTheme);
     }
-  } catch {
-    // useBible pode falhar se usado fora do provider, então fallback
-  }
+  }, [controlledTheme, bible?.setCurrentTheme]);
+
+  // Sincroniza customTheme controlado vindo por props com o contexto
+  React.useEffect(() => {
+    if (controlledCustomTheme && bible?.setCustomTheme) {
+      bible.setCustomTheme(controlledCustomTheme);
+    }
+  }, [controlledCustomTheme, bible?.setCustomTheme]);
+
+  // Define qual tema usar considerando contexto e fallbacks
+  let themeToUse: any = lightTheme;
+  const themeKey = bible?.currentTheme ?? fallbackInitialTheme;
+  const customFromContext = bible?.customTheme ?? fallbackCustomTheme;
+
+  if (themeKey === "dark") themeToUse = darkTheme;
+  else if (themeKey === "custom" && customFromContext)
+    themeToUse = customFromContext;
+  else themeToUse = lightTheme;
+
+  return <ThemeProvider theme={themeToUse}>{children}</ThemeProvider>;
+};
+
+const BibleContextWrapper: React.FC<BibleContextWrapperProps> = ({
+  children,
+  initialTheme = "light",
+  customTheme,
+  currentTheme,
+  currentCustomTheme,
+}) => {
   return (
-    <BibleProvider>
-      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    <BibleProvider initialTheme={initialTheme} customTheme={customTheme}>
+      <BibleThemeBridge
+        fallbackInitialTheme={initialTheme}
+        fallbackCustomTheme={customTheme}
+        controlledTheme={currentTheme}
+        controlledCustomTheme={currentCustomTheme}
+      >
+        {children}
+      </BibleThemeBridge>
     </BibleProvider>
   );
 };
 
 export default BibleContextWrapper;
-
-// const [devotionalApiBaseUrl, setDevotionalApiBaseUrl] = useState(
-//   "https://api.experience.odb.org"
-// );
-// const [fontSizeOffset, setFontSizeOffset] = useState(0);
-// const [language, setlanguage] = useState("pt-br");
-// const [currentBookName, setCurrentBookName] = useState("Gênesis");
-// const [currentBookSlug, setCurrentBookSlug] = useState("gen");
-// const [currentBookChapter, setCurrentBookChapter] = useState(1);
-// const [currentVersion, setCurrentVersion] = useState("nvt");
-// const [currentTheme, setCurrentTheme] = useState("dark");
-// const [currentTrack, setCurrentTrack] = useState("");
-// const [versionsOffline, setVersionsOffline] = useState<any[]>([]);
-// const [currentVersionTitle, setCurrentVersionTitle] = useState(
-//   "Nova Versão Transformadora"
-// );
-
-// function updateContext(config: any) {
-//   Storage.persist("BibleConfig", config);
-//   setDevotionalApiBaseUrl(
-//     config.devotionalApiBaseUrl ?? "https://api.experience.odb.org"
-//   );
-//   setFontSizeOffset(config.fontSizeOffset ?? 0);
-//   setlanguage(config.language);
-//   setCurrentBookName(config.currentBookName);
-//   setCurrentBookSlug(config.currentBookSlug);
-//   setCurrentBookChapter(config.currentBookChapter);
-//   setCurrentVersion(config.currentVersion);
-//   setCurrentTheme(config.currentTheme);
-//   setCurrentTrack(config.currentTrack);
-//   setCurrentVersionTitle(config.currentVersionTitle);
-//   setVersionsOffline(config.versionsOffline);
-// }
-
-// useEffect(() => {
-//   async function loadStoredConfig() {
-//     const bibleConfig = await Storage.get("BibleConfig");
-//     if (bibleConfig) {
-//       updateContext(bibleConfig);
-//     }
-//   }
-//   loadStoredConfig();
-// }, []);
-
-//   const contextValue: BibleContextType = useMemo(
-//     () => ({
-//       devotionalApiBaseUrl,
-//       fontSizeOffset,
-//       language,
-//       currentTrack,
-//       currentBookName,
-//       currentBookSlug,
-//       currentBookChapter,
-//       currentVersion,
-//       currentTheme,
-//       currentVersionTitle,
-//       versionsOffline,
-//       updateContext,
-//       audioPlayer: {
-//         isPlayerReady: false,
-//         isPlaying: false,
-//         playbackState: undefined,
-//         currentVerse: null,
-//         playChapter: async () => {},
-//         pause: async () => {},
-//         play: async () => {},
-//         stop: async () => {},
-//         queue: [],
-//       },
-//     }),
-//     [
-//       devotionalApiBaseUrl,
-//       fontSizeOffset,
-//       language,
-//       currentTrack,
-//       currentBookName,
-//       currentBookSlug,
-//       currentBookChapter,
-//       currentVersion,
-//       currentTheme,
-//       currentVersionTitle,
-//       versionsOffline,
-//     ]
-//   );
-
-//   return (
-//     <BibleContext.Provider value={contextValue}>
-//       <ThemeProvider theme={currentTheme === "dark" ? darkTheme : defaultTheme}>
-//         {children}
-//       </ThemeProvider>
-//     </BibleContext.Provider>
-//   );
-// }

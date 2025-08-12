@@ -12,13 +12,48 @@ import CardSelectBible from "../CardSelectBible";
 import Tooltip from "../../components/Tooltip";
 
 export const colors = [
-  { name: "yellow", color: "#fcfd0a", highlightColor: "#ffffff" },
-  { name: "gray", color: "#e9e9e9", highlightColor: "#ffff99" },
-  { name: "green", color: "#99ff99", highlightColor: "#ffff99" },
-  { name: "orange", color: "#ff9900", highlightColor: "#ffff99" },
-  { name: "purple", color: "#cc99ff", highlightColor: "#ffff99" },
-  { name: "bege", color: "#cc9966", highlightColor: "#ffff99" },
-  { name: "chumbo", color: "#afceeb", highlightColor: "#ffff99" },
+  {
+    name: "yellow",
+    color: "#fcfd0a",
+    textColor: "#000000",
+    highlightColor: "#ffffff",
+  },
+  {
+    name: "gray",
+    color: "#e9e9e9",
+    textColor: "#000000",
+    highlightColor: "#ffff99",
+  },
+  {
+    name: "green",
+    color: "#99ff99",
+    textColor: "#000000",
+    highlightColor: "#ffff99",
+  },
+  {
+    name: "orange",
+    color: "#ff9900",
+    textColor: "#000000",
+    highlightColor: "#ffff99",
+  },
+  {
+    name: "purple",
+    color: "#cc99ff",
+    textColor: "#000000",
+    highlightColor: "#ffff99",
+  },
+  {
+    name: "bege",
+    color: "#cc9966",
+    textColor: "#000000",
+    highlightColor: "#ffff99",
+  },
+  {
+    name: "chumbo",
+    color: "#afceeb",
+    textColor: "#000000",
+    highlightColor: "#ffff99",
+  },
 ];
 
 export default function ReaderModal({
@@ -60,6 +95,7 @@ export default function ReaderModal({
       // console.log("data", data);
       setContentList(data as IBibleVerse[]);
 
+      refContent?.current?.scrollToOffset({ offset: 0, animated: false });
       setLoading(false);
     }
     setLoading(true);
@@ -74,6 +110,7 @@ export default function ReaderModal({
   async function bibleNavigate(direction: "next" | "prev") {
     if (!bibleContext) return;
     const config = bibleContext;
+    setLoading(true);
     bibleContext.audioPlayer.pause();
     const nextBook = await getLinkBook(config, direction);
 
@@ -88,7 +125,6 @@ export default function ReaderModal({
     //   boookSelected(book);
     // }
     // setCurrentBook(nextBook);
-    refContent?.current?.scrollToOffset({ offset: 0 });
   }
   function renderItem({ item }: { item: IBibleVerse }) {
     const { verseNumber, verseText } = item;
@@ -145,7 +181,19 @@ export default function ReaderModal({
                 : {},
             ]}
           >
-            <Styled.VerseNumber fontSizeOffset={fontSizeOffset}>
+            <Styled.VerseNumber
+              style={[
+                bookmarkData
+                  ? {
+                      color:
+                        colors.find(
+                          (color) => color.name === bookmarkData.color
+                        )?.textColor || "#000000",
+                    }
+                  : {},
+              ]}
+              fontSizeOffset={fontSizeOffset}
+            >
               {`${verseNumber} `}
             </Styled.VerseNumber>
           </View>
@@ -166,7 +214,19 @@ export default function ReaderModal({
                     : {},
                 ]}
               >
-                <Styled.VerseText fontSizeOffset={fontSizeOffset}>
+                <Styled.VerseText
+                  style={[
+                    bookmarkData
+                      ? {
+                          color:
+                            colors.find(
+                              (color) => color.name === bookmarkData.color
+                            )?.textColor || "#000000",
+                        }
+                      : {},
+                  ]}
+                  fontSizeOffset={fontSizeOffset}
+                >
                   {word}
                 </Styled.VerseText>
               </View>

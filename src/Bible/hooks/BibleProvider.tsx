@@ -9,9 +9,19 @@ import TrackPlayer, {
 import { BibleContext, BibleContextType } from "./useBible";
 import * as Storage from "../../services/storage";
 
-export const BibleProvider: React.FC<{ children: React.ReactNode }> = ({
+interface BibleProviderProps {
+  children: React.ReactNode;
+  initialTheme?: 'light' | 'dark' | 'custom';
+  customTheme?: any;
+}
+
+export const BibleProvider: React.FC<BibleProviderProps> = ({
   children,
+  initialTheme = 'light',
+  customTheme: customThemeProp,
 }) => {
+  const [customTheme, setCustomTheme] = useState<any>(customThemeProp);
+
   const [isPlayerReady, setIsPlayerReady] = useState(false);
   const [currentVerse, setCurrentVerse] = useState<string | null>(null);
   const playbackState = usePlaybackState();
@@ -88,7 +98,7 @@ export const BibleProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentVersionTitle, setCurrentVersionTitle] = useState(
     "Nova Versão Transformadora"
   );
-  const [currentTheme, setCurrentTheme] = useState("dark");
+  const [currentTheme, setCurrentTheme] = useState(initialTheme);
   const [currentTrack, setCurrentTrack] = useState("");
   const [versionsOffline, setVersionsOffline] = useState<any[]>([]);
 
@@ -166,6 +176,8 @@ export const BibleProvider: React.FC<{ children: React.ReactNode }> = ({
     updateContext,
     bookmarks,
     setBookmarks,
+    customTheme,
+    setCustomTheme,
     audioPlayer: {
       isPlayerReady,
       isPlaying,
@@ -177,7 +189,12 @@ export const BibleProvider: React.FC<{ children: React.ReactNode }> = ({
       stop,
       queue,
     },
-  } as BibleContextType;
+  } as BibleContextType & { customTheme?: any, setCustomTheme?: (theme: any) => void };
+
+  // Atualiza customTheme se prop mudar
+  React.useEffect(() => {
+    if (customThemeProp) setCustomTheme(customThemeProp);
+  }, [customThemeProp]);
 
   return (
     <BibleContext.Provider value={contextValue}>

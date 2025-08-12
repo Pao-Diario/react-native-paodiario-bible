@@ -85,6 +85,7 @@ export const VerseNumber = styled.Text<FontSizeOffsetProps>`
   line-height: ${(props) => (props.fontSizeOffset || 0) + 22}px;
   font-family: ${(props) => props.theme.fonts.body};
   font-size: ${(props) => (props.fontSizeOffset || 0) + 16}px;
+  color: ${({ theme }: { theme: any }) => theme.colors.text};
 `;
 export const VerseText = styled.Text<FontSizeOffsetProps>`
   text-align: justify;

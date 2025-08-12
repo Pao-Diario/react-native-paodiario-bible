@@ -7,3 +7,5 @@ export { default as CardBIY } from "./Bible/CardBIY";
 export { default as VerseOfTheDay } from "./Bible/VerseOfTheDay";
 export { default as BibleVersesModal } from "./Bible/BibleVersesModal";
 export { default as HomeBible } from "./Bible/HomeBible";
+export { default as useBible } from "./Bible/hooks/useBible";
+export { default as BibleContext } from "./Bible/hooks/useBible";
