@@ -1,6 +1,6 @@
 {
   "name": "react-native-paodiario-bible",
-  "version": "1.0.12",
+  "version": "1.0.16",
   "description": "Componente bíblia reutilizável para React Native.",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
@@ -21,7 +21,9 @@
   },
   "scripts": {
     "build": "rm -rf lib && npx tsc",
-    "deploy": "npm run build && npm pack && npm publish"
+    "pack:tgz": "npm run build && npm pack",
+    "deploy": "npm run pack:tgz && npm publish",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
@@ -34,12 +36,11 @@
     "react-native-fs": ">=2.16.6",
     "react-native-select-dropdown": ">=3.3.3",
     "react-native-share": ">=10.2.1",
-    "react-native-track-player": "^4.1.1",
+    "react-native-track-player": "^4.1.2",
     "styled-components": ">=5.0.0",
     "typescript": "^5.9.2"
   },
   "peerDependencies": {
-    "react-native-track-player": "^4.1.1",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-vector-icons/fontawesome5": "^12.2.0",
     "@react-native-vector-icons/material-icons": "^12.3.0",
@@ -51,6 +52,7 @@
     "react-native-fs": ">=2.16.6",
     "react-native-select-dropdown": ">=3.3.3",
     "react-native-share": ">=10.2.1",
+    "react-native-track-player": "^4.1.2",
     "styled-components": ">=5.0.0"
   },
   "peerDependenciesMeta": {
@@ -61,6 +63,8 @@
   "devDependencies": {
     "@react-native/typescript-config": "^0.80.2",
     "@types/jest": "^30.0.0",
-    "@types/react": "^19.1.9"
-  }
+    "@types/react": "^19.1.9",
+    "patch-package": "^8.0.1"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

@@ -10,6 +10,10 @@ import { FontAwesome5 as Icon } from "@react-native-vector-icons/fontawesome5";
 interface FontSizeOffsetProps {
   fontSizeOffset?: number;
 }
+interface VerseWordProps extends FontSizeOffsetProps {
+  textColor?: string;
+  isSelected?: boolean;
+}
 interface PlayerOpenedProps {
   isPlayerOpened: boolean;
 }
@@ -93,6 +97,19 @@ export const VerseText = styled.Text<FontSizeOffsetProps>`
   line-height: ${(props) => (props.fontSizeOffset || 0) + 22}px;
   font-family: ${(props) => props.theme.fonts.body};
   font-size: ${(props) => (props.fontSizeOffset || 0) + 16}px;
+`;
+export const VerseWord = styled.Text<VerseWordProps>`
+  color: ${({ textColor, theme }) => textColor || theme.colors.text};
+  line-height: ${(props) => (props.fontSizeOffset || 0) + 22}px;
+  font-family: ${(props) => props.theme.fonts.body};
+  font-size: ${(props) => (props.fontSizeOffset || 0) + 16}px;
+  ${({ isSelected, theme }) =>
+    isSelected
+      ? `
+    border-bottom-width: 2px;
+    border-bottom-color: ${theme.colors.text};
+  `
+      : ""}
 `;
 export const LoadingArea = styled.View`
   position: absolute;

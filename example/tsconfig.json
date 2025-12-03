@@ -1,6 +1,12 @@
 {
+  "extends": "@react-native/typescript-config",
   "compilerOptions": {
-    "jsx": "react"
-  },
-  "extends": "@react-native/typescript-config"
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "react-native-paodiario-bible": [
+        "../src"
+      ]
+    }
+  }
 }
