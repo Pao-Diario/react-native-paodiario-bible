@@ -1,6 +1,8 @@
 import styled from "styled-components/native";
 import { Dimensions } from "react-native";
-
+interface FontSizeOffsetProps {
+  fontSizeOffset: number;
+}
 const { width: SCREEN_WIDTH } = Dimensions.get("screen");
 export const Container = styled.View`
   min-width: 100%;
@@ -87,12 +89,33 @@ interface VerseProps {
   fontSizeOffset?: number;
 }
 
-export const Verse = styled.Text<VerseProps>`
+export const VerseTitle = styled.Text<VerseProps>`
   font-size: ${(props) => (props.fontSizeOffset || 0) + 16}px;
   line-height: ${(props) => (props.fontSizeOffset || 0) + 24}px;
   color: ${({ theme }) => theme.colors.text};
   max-width: ${SCREEN_WIDTH - 40}px;
   text-align: justify;
+  font-weight: bold;
+  padding-bottom: 16px;
+`;
+export const VerseArea = styled.TouchableOpacity.attrs({ activeOpacity: 0.8 })`
+  padding-bottom: 6px;
+  padding-top: 6px;
+  position: relative;
+`;
+export const VerseNumber = styled.Text<FontSizeOffsetProps>`
+  font-weight: bold;
+  color: ${({ theme }: { theme: any }) => theme.colors.text};
+  margin-right: 6px;
+`;
+export const VerseText = styled.Text<FontSizeOffsetProps>`
+  text-align: justify;
+  color: ${({ theme }: { theme: any }) => theme.colors.text};
+  line-height: ${(props) => (props.fontSizeOffset || 0) + 22}px;
+  font-family: ${(props) => props.theme.fonts.body};
+  font-size: ${(props) => (props.fontSizeOffset || 0) + 16}px;
+  padding-bottom: 6px;
+  padding-top: 6px;
 `;
 export const FormButton = styled.TouchableOpacity`
   margin-top: 20px;

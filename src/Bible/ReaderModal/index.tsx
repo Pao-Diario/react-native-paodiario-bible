@@ -198,8 +198,7 @@ export default function ReaderModal({
             : {},
           bookmarkData
             ? {
-                backgroundColor:
-                  bookmarkColor?.color || "#00e1ff",
+                backgroundColor: bookmarkColor?.color || "#00e1ff",
                 marginHorizontal: -20,
                 paddingHorizontal: 20,
               }
@@ -287,56 +286,58 @@ export default function ReaderModal({
       key={991}
     >
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
-        <Styled.ThemedSafeAreaView>
-          <Styled.Container>
-            <Styled.Header>
-              <View
-                style={{
-                  flex: 1,
+      <Styled.ThemedSafeAreaView>
+        <Styled.Container>
+          <Styled.Header>
+            <View
+              style={{
+                flex: 1,
+              }}
+            >
+              {biblePickerModalVisible && (
+                <BookPicker
+                  onDismiss={({ openVersion }) => {
+                    if (openVersion) {
+                      setVersionPickerVisible(true);
+                    }
+                    setBiblePickerVisible(false);
+                  }}
+                  currentBook={currentBook}
+                  onSelect={(book: any) => {
+                    updateCurrentBook(book);
+                  }}
+                  visible={biblePickerModalVisible}
+                />
+              )}
+              {versionPickerModalVisible && (
+                <VersionPicker
+                  onDismiss={() => {
+                    setVersionPickerVisible(false);
+                  }}
+                  visible={versionPickerModalVisible}
+                />
+              )}
+              <CardSelectStyles.ButtonSelect
+                onPress={() => {
+                  setBiblePickerVisible(!biblePickerModalVisible);
                 }}
               >
-                {biblePickerModalVisible && (
-                  <BookPicker
-                    onDismiss={({ openVersion }) => {
-                      if (openVersion) {
-                        setVersionPickerVisible(true);
-                      }
-                      setBiblePickerVisible(false);
-                    }}
-                    currentBook={currentBook}
-                    onSelect={(book: any) => {
-                      updateCurrentBook(book);
-                    }}
-                    visible={biblePickerModalVisible}
-                  />
-                )}
-                {versionPickerModalVisible && (
-                  <VersionPicker
-                    onDismiss={() => {
-                      setVersionPickerVisible(false);
-                    }}
-                    visible={versionPickerModalVisible}
-                  />
-                )}
-                <CardSelectStyles.ButtonSelect
+                <CardSelectStyles.ButtonSelectText>{`${
+                  currentBook?.title || "Selecionar livro"
+                } ${
+                  currentBook?.chapter || ""
+                }`}</CardSelectStyles.ButtonSelectText>
+                <CardSelectStyles.ButtonVersionContainer
                   onPress={() => {
-                    setBiblePickerVisible(!biblePickerModalVisible);
+                    setVersionPickerVisible(!versionPickerModalVisible);
                   }}
                 >
-                  <CardSelectStyles.ButtonSelectText>{`${
-                    currentBook?.title || "Selecionar livro"
-                  } ${currentBook?.chapter || ""}`}</CardSelectStyles.ButtonSelectText>
-                  <CardSelectStyles.ButtonVersionContainer
-                    onPress={() => {
-                      setVersionPickerVisible(!versionPickerModalVisible);
-                    }}
-                  >
-                    <CardSelectStyles.ButtonVersionText>
-                      {currentVersion}
-                    </CardSelectStyles.ButtonVersionText>
-                  </CardSelectStyles.ButtonVersionContainer>
-                </CardSelectStyles.ButtonSelect>
-              </View>
+                  <CardSelectStyles.ButtonVersionText>
+                    {currentVersion}
+                  </CardSelectStyles.ButtonVersionText>
+                </CardSelectStyles.ButtonVersionContainer>
+              </CardSelectStyles.ButtonSelect>
+            </View>
             <Styled.HeaderGroup>
               <Tooltip
                 visible={fontChangeVisible}
@@ -392,7 +393,7 @@ export default function ReaderModal({
                 <MaterialIcons
                   name="close"
                   size={28}
-                  color={isDarkMode ? "#fff" : "#000"}
+                  color={isDarkMode ? "#fff" : "#fff"}
                 />
               </Styled.CloseButton>
             </Styled.HeaderGroup>

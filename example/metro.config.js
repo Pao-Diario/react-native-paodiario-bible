@@ -17,8 +17,10 @@ const config = {
     // Force Metro to resolve everything from the app's node_modules first to avoid duplicate React copies.
     disableHierarchicalLookup: true,
     // Point the example directly at the source for faster iteration.
-    extraNodeModules: {
+    alias: {
       "react-native-paodiario-bible": path.resolve(workspaceRoot, "src"),
+    },
+    extraNodeModules: {
       react: path.resolve(projectRoot, "node_modules/react"),
       "react-native": path.resolve(projectRoot, "node_modules/react-native"),
       "react-native-track-player": path.resolve(
