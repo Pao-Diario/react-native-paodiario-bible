@@ -159,7 +159,7 @@ export default function BibleVersesModal({
       const contents = await Promise.all(
         listVerses.map(async (item) => {
           const content = await getBibleText(item.title);
-          console.log("content", content);
+
           return content;
         })
       );
