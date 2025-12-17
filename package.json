@@ -1,6 +1,6 @@
 {
   "name": "react-native-paodiario-bible",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "Componente bíblia reutilizável para React Native.",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
