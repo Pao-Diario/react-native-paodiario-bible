@@ -1,5 +1,8 @@
-const path = require("path");
-const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
+const path = require('path');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+
+const projectRoot = __dirname;
+const workspaceRoot = path.resolve(__dirname, '..');
 
 /**
  * Metro configuration
@@ -8,7 +11,7 @@ const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
  * @type {import('@react-native/metro-config').MetroConfig}
  */
 const projectRoot = __dirname;
-const workspaceRoot = path.resolve(__dirname, "..");
+const workspaceRoot = path.resolve(__dirname, '..');
 
 const config = {
   projectRoot,
@@ -18,19 +21,19 @@ const config = {
     disableHierarchicalLookup: true,
     // Point the example directly at the source for faster iteration.
     alias: {
-      "react-native-paodiario-bible": path.resolve(workspaceRoot, "src"),
+      'react-native-paodiario-bible': path.resolve(workspaceRoot, 'src'),
     },
     extraNodeModules: {
-      react: path.resolve(projectRoot, "node_modules/react"),
-      "react-native": path.resolve(projectRoot, "node_modules/react-native"),
-      "react-native-track-player": path.resolve(
+      react: path.resolve(projectRoot, 'node_modules/react'),
+      'react-native': path.resolve(projectRoot, 'node_modules/react-native'),
+      'react-native-track-player': path.resolve(
         projectRoot,
-        "node_modules/react-native-track-player"
+        'node_modules/react-native-track-player',
       ),
     },
     nodeModulesPaths: [
-      path.resolve(projectRoot, "node_modules"),
-      path.resolve(workspaceRoot, "node_modules"),
+      path.resolve(projectRoot, 'node_modules'),
+      path.resolve(workspaceRoot, 'node_modules'),
     ],
   },
 };
