@@ -1,10 +1,10 @@
 import axios from "axios";
 
-export const BaseUrl = "https://universitarios.app.paodiario.org.br/";
+// export const BaseUrl = "https://universitarios.app.paodiario.org.br/";
+export const BaseUrl = "http://localhost:8080/";
 export const devotionalsAPI = axios.create({
   // baseURL: 'https://publicacoespaodiario.com.br/clube/api-xmls-universitario/',
-  baseURL:
-    "https://universitarios.app.paodiario.org.br/api-xmls-universitario/",
+  baseURL: `${BaseUrl}api-xmls-universitario/`,
 });
 
 export function getUploadURL(path) {

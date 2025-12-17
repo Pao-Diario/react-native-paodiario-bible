@@ -11,20 +11,20 @@ Agora é possível alterar o tema da bíblia diretamente pelo app consumidor, in
 Basta passar as props `initialTheme` e `customTheme` para o `BibleContextWrapper`:
 
 ```tsx
-import BibleContextWrapper from 'react-native-paodiario-bible/dist/Bible/Context';
+import BibleContextWrapper from "react-native-paodiario-bible/dist/Bible/Context";
 
 const meuTema = {
-  name: 'custom',
+  name: "custom",
   colors: {
-    primary: '#123456',
-    background: '#f0f0f0',
+    primary: "#123456",
+    background: "#f0f0f0",
     // ...demais propriedades de tema
-  }
+  },
 };
 
 <BibleContextWrapper initialTheme="custom" customTheme={meuTema}>
   {/* Seu app aqui */}
-</BibleContextWrapper>
+</BibleContextWrapper>;
 ```
 
 ### Como usar tema padrão (light/dark)
@@ -43,24 +43,25 @@ const meuTema = {
 Você pode trocar o tema (inclusive customizado) a qualquer momento no seu app, usando o hook `useBible`:
 
 ```tsx
-import useBible from 'react-native-paodiario-bible/dist/Bible/hooks/useBible';
+import useBible from "react-native-paodiario-bible/dist/Bible/hooks/useBible";
 
 const MeuComponente = () => {
   const { setCurrentTheme, setCustomTheme } = useBible();
 
   // Para trocar para dark
-  setCurrentTheme && setCurrentTheme('dark');
+  setCurrentTheme && setCurrentTheme("dark");
 
   // Para trocar para custom
-  setCurrentTheme && setCurrentTheme('custom');
-  setCustomTheme && setCustomTheme({
-    name: 'custom',
-    colors: {
-      primary: '#abcdef',
-      background: '#222222',
-      // ...outras propriedades
-    }
-  });
+  setCurrentTheme && setCurrentTheme("custom");
+  setCustomTheme &&
+    setCustomTheme({
+      name: "custom",
+      colors: {
+        primary: "#abcdef",
+        background: "#222222",
+        // ...outras propriedades
+      },
+    });
 };
 ```
 
@@ -76,3 +77,8 @@ npx rnvi-update-plist package.json ios/example/Info.plist
 npm i react-native-fs
 
 npm i react-native-track-player
+
+### Testing
+
+- npm run pack:tgz
+- cd example/android && ./gradlew -q assembleDebug

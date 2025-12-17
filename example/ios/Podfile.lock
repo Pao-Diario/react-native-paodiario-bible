@@ -1648,7 +1648,7 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
     - SocketRocket
-  - react-native-track-player (4.1.1):
+  - react-native-track-player (4.1.2):
     - React-Core
     - SwiftAudioEx (= 1.1.0)
   - react-native-vector-icons-fontawesome5 (12.2.0)
@@ -2478,7 +2478,7 @@ SPEC CHECKSUMS:
   React-logger: 7cfc7b1ae1f8e5fe5097f9c746137cc3a8fad4ce
   React-Mapbuffer: 7018c5b7da5b13ed22fe55dae51d50187a00b2d7
   React-microtasksnativemodule: 8ff9cb220a8efa625b5885996bd69e69db9edf02
-  react-native-track-player: 6dc2e2633265704b8ab6d8124b80239d4ed1f911
+  react-native-track-player: dd56f9948e03756a217c75e0a61aa04aab65b5a1
   react-native-vector-icons-fontawesome5: 1199fa2cf3323fac0b9b52b2aecb1329aa3602a5
   react-native-vector-icons-material-icons: eff7417eb1ac6c740ab802837ad34b8233fded34
   React-NativeModulesApple: 37c08c3c54db55854de816b0df0f3683832be35a

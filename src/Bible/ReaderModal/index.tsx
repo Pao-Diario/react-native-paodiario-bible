@@ -1,4 +1,4 @@
-import { Modal, StatusBar, TouchableOpacity, Text, View } from "react-native";
+import { Modal, StatusBar, TouchableOpacity, View } from "react-native";
 import * as Styled from "./styles";
 import { MaterialIcons } from "@react-native-vector-icons/material-icons";
 import { FontAwesome5 } from "@react-native-vector-icons/fontawesome5";
@@ -8,8 +8,10 @@ import { ThemeContext } from "styled-components/native";
 import { FlatList } from "react-native";
 
 import { getLinkBook, loadBibleContent } from "../functions";
-import CardSelectBible from "../CardSelectBible";
 import Tooltip from "../../components/Tooltip";
+import BookPicker from "../BookPicker";
+import VersionPicker from "../VersionPicker";
+import * as CardSelectStyles from "../CardSelectBible/styles";
 
 export const colors = [
   {
@@ -81,6 +83,10 @@ export default function ReaderModal({
   // Estados do player vindos do contexto
   const isPlaying = bibleContext.audioPlayer.isPlaying;
   const bookmarkedVerses = bibleContext.bookmarks;
+  const [biblePickerModalVisible, setBiblePickerVisible] = useState(false);
+  const [versionPickerModalVisible, setVersionPickerVisible] = useState(false);
+  const [currentBook, setCurrentBook] = useState<any>();
+  const [currentVersion, setCurrentVersion] = useState("nvt");
 
   const isDarkMode = bibleContext.currentTheme === "dark";
 
@@ -126,6 +132,34 @@ export default function ReaderModal({
     // }
     // setCurrentBook(nextBook);
   }
+  async function updateCurrentBook(book: any) {
+    const config = bibleContext;
+    if (config) {
+      config.updateContext({
+        ...config,
+        currentBookName: book.title,
+        currentBookSlug: book.slug,
+        currentBookChapter: book?.chapter || null,
+      });
+      setCurrentBook(book);
+      refContent?.current?.scrollToOffset({ offset: 0, animated: false });
+    }
+  }
+
+  useEffect(() => {
+    if (!bibleContext) return;
+    setCurrentVersion(bibleContext.currentVersion);
+    setCurrentBook({
+      slug: bibleContext.currentBookSlug,
+      title: bibleContext.currentBookName,
+      chapter: bibleContext.currentBookChapter,
+    });
+  }, [
+    bibleContext?.currentBookSlug,
+    bibleContext?.currentBookName,
+    bibleContext?.currentBookChapter,
+    bibleContext?.currentVersion,
+  ]);
   function renderItem({ item }: { item: IBibleVerse }) {
     const { verseNumber, verseText } = item;
     const verseId = `${bibleContext?.currentBookChapter}_${item.verseNumber}`;
@@ -139,6 +173,10 @@ export default function ReaderModal({
         bookmark.chapterNumber === item?.chapterNumber &&
         bookmark.verseNumber === item?.verseNumber
     );
+    const bookmarkColor = bookmarkData
+      ? colors.find((color) => color.name === bookmarkData.color)
+      : undefined;
+    const bookmarkTextColor = bookmarkColor?.textColor;
     // console.log("bookmarkData", bookmarkData);
     return (
       <Styled.VerseArea
@@ -160,9 +198,7 @@ export default function ReaderModal({
             : {},
           bookmarkData
             ? {
-                backgroundColor:
-                  colors.find((color) => color.name === bookmarkData.color)
-                    ?.color || "#00e1ff",
+                backgroundColor: bookmarkColor?.color || "#00e1ff",
                 marginHorizontal: -20,
                 paddingHorizontal: 20,
               }
@@ -170,25 +206,17 @@ export default function ReaderModal({
         ]}
       >
         <Styled.VerseText fontSizeOffset={fontSizeOffset}>
-          <View
+          <Styled.VerseWord
             key={`verse-${verseNumber}`}
-            style={[
-              isSelected
-                ? {
-                    borderBottomWidth: 2,
-                    borderBottomColor: theme?.colors?.text || "#2196f3",
-                  }
-                : {},
-            ]}
+            fontSizeOffset={fontSizeOffset}
+            isSelected={isSelected}
+            textColor={bookmarkTextColor}
           >
             <Styled.VerseNumber
               style={[
                 bookmarkData
                   ? {
-                      color:
-                        colors.find(
-                          (color) => color.name === bookmarkData.color
-                        )?.textColor || "#000000",
+                      color: bookmarkTextColor || "#000000",
                     }
                   : {},
               ]}
@@ -196,40 +224,21 @@ export default function ReaderModal({
             >
               {`${verseNumber} `}
             </Styled.VerseNumber>
-          </View>
+          </Styled.VerseWord>
           {verseText?.split(/(\s+)/).map((word, idx) => {
             // Se for espaço, renderiza diretamente
             if (/^\s+$/.test(word)) {
               return word;
             }
             return (
-              <View
-                key={idx}
-                style={[
-                  isSelected
-                    ? {
-                        borderBottomWidth: 2,
-                        borderBottomColor: theme?.colors?.text || "#2196f3",
-                      }
-                    : {},
-                ]}
+              <Styled.VerseWord
+                key={`${verseNumber}-${idx}`}
+                fontSizeOffset={fontSizeOffset}
+                isSelected={isSelected}
+                textColor={bookmarkTextColor}
               >
-                <Styled.VerseText
-                  style={[
-                    bookmarkData
-                      ? {
-                          color:
-                            colors.find(
-                              (color) => color.name === bookmarkData.color
-                            )?.textColor || "#000000",
-                        }
-                      : {},
-                  ]}
-                  fontSizeOffset={fontSizeOffset}
-                >
-                  {word}
-                </Styled.VerseText>
-              </View>
+                {word}
+              </Styled.VerseWord>
             );
           })}
         </Styled.VerseText>
@@ -280,15 +289,55 @@ export default function ReaderModal({
       <Styled.ThemedSafeAreaView>
         <Styled.Container>
           <Styled.Header>
-            <CardSelectBible
+            <View
               style={{
                 flex: 1,
               }}
-              showReadButton={false}
-              boookSelected={(book) => {
-                refContent?.current?.scrollToOffset({ offset: 0 });
-              }}
-            />
+            >
+              {biblePickerModalVisible && (
+                <BookPicker
+                  onDismiss={({ openVersion }) => {
+                    if (openVersion) {
+                      setVersionPickerVisible(true);
+                    }
+                    setBiblePickerVisible(false);
+                  }}
+                  currentBook={currentBook}
+                  onSelect={(book: any) => {
+                    updateCurrentBook(book);
+                  }}
+                  visible={biblePickerModalVisible}
+                />
+              )}
+              {versionPickerModalVisible && (
+                <VersionPicker
+                  onDismiss={() => {
+                    setVersionPickerVisible(false);
+                  }}
+                  visible={versionPickerModalVisible}
+                />
+              )}
+              <CardSelectStyles.ButtonSelect
+                onPress={() => {
+                  setBiblePickerVisible(!biblePickerModalVisible);
+                }}
+              >
+                <CardSelectStyles.ButtonSelectText>{`${
+                  currentBook?.title || "Selecionar livro"
+                } ${
+                  currentBook?.chapter || ""
+                }`}</CardSelectStyles.ButtonSelectText>
+                <CardSelectStyles.ButtonVersionContainer
+                  onPress={() => {
+                    setVersionPickerVisible(!versionPickerModalVisible);
+                  }}
+                >
+                  <CardSelectStyles.ButtonVersionText>
+                    {currentVersion}
+                  </CardSelectStyles.ButtonVersionText>
+                </CardSelectStyles.ButtonVersionContainer>
+              </CardSelectStyles.ButtonSelect>
+            </View>
             <Styled.HeaderGroup>
               <Tooltip
                 visible={fontChangeVisible}
@@ -344,7 +393,7 @@ export default function ReaderModal({
                 <MaterialIcons
                   name="close"
                   size={28}
-                  color={isDarkMode ? "#fff" : "#000"}
+                  color={isDarkMode ? "#fff" : "#fff"}
                 />
               </Styled.CloseButton>
             </Styled.HeaderGroup>
