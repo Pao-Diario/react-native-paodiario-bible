@@ -6,6 +6,14 @@ Componente bíblia reutilizável para React Native
 
 Agora é possível alterar o tema da bíblia diretamente pelo app consumidor, incluindo a possibilidade de passar um tema customizado.
 
+## Instalação (importante)
+
+Este pacote usa `styled-components` e deve compartilhar a **mesma instância de React** do app consumidor.
+
+- Instale `styled-components` no app (não deixe ficar aninhado dentro do pacote).
+- Se você usa npm/Expo e receber `Invalid hook call`, garanta que `react-dom` esteja instalado e **na mesma versão do `react`** (ex.: `react@19.0.0` + `react-dom@19.0.0`).
+- Use o hook `useBible()` apenas dentro do `BibleContextWrapper` (ou seja, abaixo do Provider na árvore).
+
 ### Como usar tema customizado
 
 Basta passar as props `initialTheme` e `customTheme` para o `BibleContextWrapper`:

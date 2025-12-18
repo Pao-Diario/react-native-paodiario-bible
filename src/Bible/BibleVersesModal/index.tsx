@@ -123,9 +123,10 @@ export default function BibleVersesModal({
 
   async function getBibleText(title: string) {
     if (!title || title.trim() === "") return [];
+    const normalizedTitle = /\d/.test(title) ? title.trim() : `${title.trim()} 1`;
     try {
       const response = await api.get(
-        `bible/search/ref/${title}/contentType/html`
+        `bible/search/ref/${normalizedTitle}/contentType/html`
       );
       if (response.data) {
         return parseBibleHtml(response.data.content ?? response.data);
