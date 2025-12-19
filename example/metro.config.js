@@ -10,8 +10,6 @@ const workspaceRoot = path.resolve(__dirname, '..');
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const projectRoot = __dirname;
-const workspaceRoot = path.resolve(__dirname, '..');
 
 const config = {
   projectRoot,
